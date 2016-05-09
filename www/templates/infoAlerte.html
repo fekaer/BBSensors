@@ -1,0 +1,28 @@
+<!-- Indique le nom de la vue-->
+<ion-view view-title = "Information Alerte">
+	<!-- Indique le contenu de la vue -->
+	<ion-content >
+		<ion-list delegate-handle="info-alertes"> 
+			<ion-item  class="info-alert" ng-repeat="al in lesAlertes" >
+				<h2>Alerte du : {{al.date}}</h2>
+				<p> 
+					<span>
+						tipe : {{al.tipe}}
+					</span> 
+					<span>
+						descriptif : {{al.descriptif}}
+					</span> 
+				</p>
+				<!-- ajoute un option bouton a ma liste  
+				et lui donne une icone. Quand je clique sur le bouton, effectuer la fonction deletePatient du controleur homectrl et donne l'index de la liste en entrée -->
+				<ion-option-button
+					class = "button-assertive icon ion-trash-a" ng-click="deleteAlerte($index)">
+				</ion-option-button>
+
+			</ion-item>
+		</ion-list>
+		<button class="button button-energized icon ion-model-s" ng-click="addAlerte()"></button>
+	</ion-content>
+
+
+</ion-view>

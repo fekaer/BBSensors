@@ -1,0 +1,38 @@
+/* Empty. Add your own CSS if you like */
+
+
+/* decale les info de la liste vers la droite */
+.info-patient .item-content{
+	padding-left: 60px;
+}
+
+/* modifie l'icone de la liste de home */
+.info-patient i.icon{
+	left: 10px;
+  position: absolute;
+  top: 18px;
+  font-size: 35px;
+
+
+}
+
+/* tous les span de home on une marge de 30px */
+.info-patient span{
+	margin-right: 30px;
+}
+
+.info-alert span{
+  margin-right: 30px;
+}
+
+.ion-person {
+  color : lime ;
+}
+
+.ion-alert-circled {
+  color : #B01919; /* rouge */
+}
+
+.circled_blue {
+  color : blue !important;
+}/* Empty. Add your own CSS if you like */

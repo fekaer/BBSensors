@@ -1,0 +1,55 @@
+<!-- Indique le nom de la vue (home) -->
+<ion-view view-title = "home">
+	<!-- Indique le contenu de la vue -->
+	<ion-content >
+		<!-- permet d'avoire une liste de patient -->
+				<!-- Que les éléments de la liste sont autorisés à être glissée pour révéler des boutons d'option -->
+									<!-- Permet d'identiffier (en donnant un nom "liste-patients") et de gerer la list (glissement) -->
+		<ion-list can-swipe = 'true' delegate-handle="liste-patients" > 
+						<!-- Donne un nom a mon item -->
+											<!-- ng-reapeat me permet d'avoit autent d'item que j'ai de patient -->
+																				<!-- quand je clique sur un item, je vais dans la page infoPatient avec le num de l'index de l'item -->
+			<ion-item  class="info-patient" ng-repeat="p in lesPatients" ng-show="p.supprimer != true" ui-sref="^.infoPatient({mIndex: $index})" >
+				<!-- Me permet de changer d'iconne quand patient.notification devient true. Si notification = false, bas la classe est 'icon ion-person-stalker' sinon 'icon ion-ios-star' -->
+				<!-- je mais tous sa dans une balise "i = italique" pour me simplifier la vie -->
+								<!-- Cela me permet de changer d'icon quand notification est a true ou a false-->
+										<!-- Cela me permet de clignoter l'icon quand clignote est a true-->
+				<i class="icon" ng-class="{'ion-social-rss-outline': p.etat == 0, 'ion-person': p.etat == 1, 'ion-alert-circled': p.etat == 2, 'ion-alert-circled circled_blue': p.clignote == true}" ></i>
+				<h2>Patient: {{p.nom}}</h2>
+				<p> 
+					<span>Fc: {{p.Fc}}</span> 
+					<span>SpOz: {{p.SpOz}}</span> 
+					<span>FR {{p.FR}}</span> 
+				</p>
+
+
+				<!-- ajoute un option bouton a ma liste  
+				et lui donne une icone. Quand je clique sur le bouton, effectuer la fonction modifPatient du controleur homectrl et donne l'index de la liste en entrée -->
+				<ion-option-button 
+					class = "button-energized icon ion-information-circled" ng-click="infoAlerte($index)"> 
+				</ion-option-button>
+				<!-- ajoute un option bouton a ma liste  
+				et lui donne une icone. Quand je clique sur le bouton, effectuer la fonction modifPatient du controleur homectrl et donne l'index de la liste en entrée -->
+				<ion-option-button 
+					class = "button-positive icon ion-gear-a"  ng-click="modifPatient($index)"> 
+				</ion-option-button>
+				<!-- ajoute un option bouton a ma liste  
+				et lui donne une icone. Quand je clique sur le bouton, effectuer la fonction deletePatient du controleur homectrl et donne l'index de la liste en entrée -->
+				<ion-option-button
+					class = "button-assertive icon ion-trash-a" ng-click="deletePatient($index)">
+				</ion-option-button>
+			</ion-item>
+		</ion-list>
+
+
+	</ion-content>
+	
+	<!-- Ajoute un nouveau bouton a droite pour l'ajout de patient -->
+    <ion-nav-buttons side="right" >
+
+        <!-- indique que c'est un bouton menu et qui ammenne a "addPatient" -->
+        <button class="button button-icon icon ion-person-add" ui-sref="addPatient"></button>
+    </ion-nav-buttons>
+
+
+</ion-view>

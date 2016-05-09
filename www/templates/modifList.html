@@ -1,0 +1,33 @@
+<ion-view view-title = "Modifier les donnees du patient">
+	<ion-content>
+		<form class="modifList">
+			<div class="list">
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">
+						Nom Patient
+					</span>
+					<input id='nom' type="text" ng-value="patient.nom" ng-model="patient.nom">
+				</label>
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">
+						IP
+					</span>
+					<input id='ip' type="text" ng-value="patient.mip" ng-model="patient.mip">
+				</label>
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">
+						Port
+					</span>
+					<input id='port' type="number" ng-value="patient.mport" ng-model="patient.mport">
+				</label>
+			</div>
+
+			<div class="padding">
+				<button class = "button button-block button-positive" ng-click = "modifPatient()">
+					modiffier
+				</button>
+			</div>
+
+		</form>
+	</ion-content>
+</ion-view>

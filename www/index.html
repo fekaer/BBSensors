@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title></title>
+
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
+    <!-- socket-io js -->
+    <script src="js/socket-io.js"></script>
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
+
+    <!-- your app's js -->
+    <script src="js/app.js"></script>
+
+    <!-- Mes services............................................................................................. -->
+    <script src="service/Socket.js"></script>
+    <script src="service/ListePatients.js"></script>
+    <script src="service/Notification.js"></script>
+
+    <!-- Mes controlleurs............................................................................................. -->
+    <script src="controllers/startCtrl.js"></script>
+    <script src="controllers/homeCtrl.js"></script>
+    <script src="controllers/addPatientCtrl.js"></script>
+    <script src="controllers/modifListCtrl.js"></script>
+    <script src="controllers/infoPatientCtrl.js"></script>
+    <script src="controllers/infoAlerteCtrl.js"></script>
+
+  </head>
+  <body ng-app="starter">
+    <!-- Cree une barre en haut de couleur royal (violet) -->
+    <ion-nav-bar class="bar-royal">
+      <!-- Cree un boutton retour en arriere -->
+      <ion-nav-back-button>
+      </ion-nav-back-button>
+    </ion-nav-bar>
+
+    <!-- Navigateur de page: Affiche la bonne page-->
+    <ion-nav-view>
+    </ion-nav-view>
+  </body>
+</html>
