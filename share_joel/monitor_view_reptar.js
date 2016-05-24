@@ -12,7 +12,7 @@ function getAddress(){
     switch(currentContext){
         case ServerEnum.REPTAR_WIFI:
             return "ws://192.168.2.7:5000";
-        case ServerEnum.REPTAR:
+        case ServerEnum.REPTAR_WIRE:
             return "ws://192.168.1.24:5000";
         case ServerEnum.PROXY:
             return "ws://129.194.184.60:8085";
@@ -108,7 +108,7 @@ function monitorFunction(document) {
                 this.drawFlowSignal(signal.data);
             }.bind(this);
             sock2.onmessage = function (signal) {
-                _this.basicSignal(signal.data);
+                this.basicSignal(signal.data);
             }.bind(this);
 
             // Flux du signal
