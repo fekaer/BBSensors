@@ -1,11 +1,12 @@
-<ion-view view-title = "Info Patient">
+<ion-view cache-view="false" view-title = "ECG">
 	<ion-content>
 		<div class="le_graph">
 	        <h1>Visualisation de l'ECG</h1>
-					<ion-scroll overflow-scroll="false" zooming="true" direction="xy" style="width: 100%; height: 100%">
-	      		<canvas id="monitor" width="550" height="500" style="background-color: black;"></canvas>
-					</ion-scroll>
-	        <button class="button button-energized icon ion-information-circled" ng-click="infoAlerte($index)"></button>
+					<!-- <ion-scroll overflow-scroll="false" zooming="true" direction="xy" style="width: 100%; height: 100%"> -->
+	      		<!-- <canvas id="monitor" width="550" height="500" style="background-color: black;"></canvas> -->
+						<canvas id="monitor" height="300" style="background-color: black; width: 100%;" </canvas>
+					<!-- </ion-scroll> -->
+
 	    </div>
 	</ion-content>
 </ion-view>

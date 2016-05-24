@@ -1,20 +1,31 @@
 /* Empty. Add your own CSS if you like */
 
 
-/* decale les info de la liste vers la droite */
-.info-patient .item-content{
-	padding-left: 60px;
+.info-patient .item-content {
+	padding-right: 16px;
+}
+
+.info-patient .bouton-du-patient {
+	float: left;
+}
+
+.info-patient .info-du-patient{
+	float: left;
+}
+
+.momPopover{
+	height:18%;
 }
 
 /* modifie l'icone de la liste de home */
+
 .info-patient i.icon{
-	left: 10px;
-  position: absolute;
-  top: 18px;
-  font-size: 35px;
+	margin-right: 15px;
+  font-size: 30px;
 
 
 }
+
 
 /* tous les span de home on une marge de 30px */
 .info-patient span{

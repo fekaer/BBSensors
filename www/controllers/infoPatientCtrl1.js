@@ -1,16 +1,6 @@
 // controleur du Home
 app.controller("infoPatientCtrl", function( $scope, $rootScope, $state, $stateParams, Socket, ListPatients, $ionicHistory)
 {
-  $scope.index = $stateParams.mIndex;
-  $rootScope.idVisu = $scope.index;
-  console.log($scope.index);
-  // Pour l'icone dans home
-  if($rootScope.mesPatients[$scope.index].etat == 2)
-  {
-      $rootScope.mesPatients[$scope.index].etat = 1;
-  }
-
-// Partie Joel
     ServerEnum = {
         REPTAR_WIFI: 0,
         REPTAR_WIRE: 1,
@@ -25,7 +15,7 @@ app.controller("infoPatientCtrl", function( $scope, $rootScope, $state, $statePa
         switch(currentContext){
             case ServerEnum.REPTAR_WIFI:
                 return "ws://192.168.2.7:5000";
-            case ServerEnum.REPTAR_WIRE:
+            case ServerEnum.REPTAR:
                 return "ws://192.168.1.24:5000";
             case ServerEnum.PROXY:
                 return "ws://129.194.184.60:8085";
@@ -150,15 +140,10 @@ app.controller("infoPatientCtrl", function( $scope, $rootScope, $state, $statePa
 
                 // Effaçage du signal précédent
                 this.clearOverlap = function (x) {
-                    // Condition utilisée pour effacer le début du signal
+                    // Condition utilisée pour effacer le début du signal 
                     const N = (x === MARGIN_MONITOR_LEFT) ? x - 3 : x;
                     ctx.clearRect(minMax(0, N + 1, MARGIN_MONITOR_RIGHT), positionTopY(this.position) + 2, OVERLAP_SIZE, positionBottomY(this.position) - positionTopY(this.position) - 4);
                 };
-
-                $scope.closeSocket = function(){
-                    sock1.close();
-                    sock2.close();
-                }
 
             }
 
@@ -180,7 +165,32 @@ app.controller("infoPatientCtrl", function( $scope, $rootScope, $state, $statePa
 
     $scope.$on('$ionicView.leave', function(){
       // Any thing you can think of
-      $scope.closeSocket();
+      console.log("toto");
+    });
+    
+    // Permet de couper la connection socket une fois la vue quité
+    $scope.$on("$ionicView.beforeLeave", function(event, data){
+        //$window.location.reload(true)
+        //$state.go($state.current, {}, {reload: true});
+
+        //$ionicHistory.clearCache();
+        //$state.go('app.fooDestinationView');
+
+    //alert("bibi");
+      //$scope.SignalBPM.destroy();
+      //$scope.SignalResp.destroy();
+      //$scope.SignalSp02.destroy();
+
+
+/*
+       delete $scope.SignalBPM;
+       delete $scope.SignalResp;
+       delete $scope.SignalSp02;
+*/
+
+       //$scope.test1000();
+
 
     });
+
 });

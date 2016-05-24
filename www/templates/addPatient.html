@@ -6,27 +6,30 @@
 					<span class="input-label">
 						Nom Patient
 					</span>
-					<input id='nom' type="text" placeholder='Tina' ng-model="patient.nom">
+					<!--<input id='nom' type="text" placeholder='Tina' ng-model="patient.nom"> -->
+					<input id='nom' type="text" ng-model="patient.nom">
 				</label>
 				<label class="item item-input item-stacked-label">
 					<span class="input-label">
 						IP
 					</span>
-					<input id='ip' type="text" placeholder='x.x.x.x' ng-model="patient.mip"> 
+					<!-- <input id='ip' type="text" placeholder='x.x.x.x' ng-model="patient.mip"> -->
+					<input id='ip' type="text" ng-model="patient.mip">
 				</label>
 				<label class="item item-input item-stacked-label">
 					<span class="input-label">
 						Port
 					</span>
-					<input id='port' type="number" placeholder='8000' ng-model="patient.mport">
+					<!-- <input id='port' type="number" placeholder='8000' ng-model="patient.mport"> -->
+					<input id='port' type="number" ng-model="patient.mport" >
 				</label>
 			</div>
 
 			<div class="btAdd">
-				<button class = "button button-block button-positive" ng-click = "addNewPatient()"> 
+				<button class = "button button-block button-positive" ng-click = "addNewPatient()">
 					Ajouter
 				</button>
-			</div> 
+			</div>
 
 		<!--</form>	-->
 	</ion-content>

@@ -16,5 +16,5 @@ app.controller("startCtrl", function( $scope, $state, $stateParams, $ionicHistor
 		disableBack: true,
 		historyRoot: true
 	})
-	
+
 });

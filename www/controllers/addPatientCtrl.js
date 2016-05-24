@@ -1,7 +1,7 @@
 // controleur du Weather
 app.controller("addPatientCtrl", function($scope, $rootScope, $state, $stateParams, $interval, ListPatients, Socket, Notification, $ionicHistory){
 
-	$scope.patient = {id: null, nom:'', Fc: 0, SpOz: 0, FR: 0, mip: "", mport: "", clignote:false, supprimer: false, etat: 0};
+	$scope.patient = {id: null, nom:'', Fc: 0, SpOz: 0, FR: 0, mip: "192.168.2.7", mport: 5000, clignote:false, supprimer: false, etat: 0};
 
 
 	$scope.addNewPatient = function()

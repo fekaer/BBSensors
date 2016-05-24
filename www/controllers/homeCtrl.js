@@ -1,45 +1,61 @@
 // controleur du Home
-app.controller("homeCtrl", function( $scope, $rootScope, $state, $ionicListDelegate, $interval, $timeout, Socket, ListPatients, Notification) {
-
+app.controller("homeCtrl", function( $scope, $rootScope, $state, $ionicListDelegate, $interval, $timeout, Socket, ListPatients, Notification, $ionicLoading) {
+	//$ionicLoading.hide();
 	$scope.lesPatients = $rootScope.mesPatients;
 	$scope.mtext = "Alerte patient: ";
   $rootScope.etatAddModif = null;
+	$rootScope.Paramgeneral = {plagetemp:2, delaisAlertRes:5};
+	$scope.bdd_ok = false;
 
 	// variable qui va indiquer si une alerte a été detecté
 	$rootScope.alerteDetect = false;
   // Variable tempon du nb patient dans le tableau pour savoir si il faut effectuer une connection
 	$scope.nbPatientTemp = 0;
 
-
+	//alert('1');
   // Fonction qui va etre appelé a chaque fois qu'on va venire ou revenire sur la vue Home
   $scope.$on('$ionicView.enter', function()
   {
-
     // Indique qu'aucun patient est visualisé (infoPatient)
-      $rootScope.idVisu = null;
-      // Indique qu'il y a plus d'allerte dans le mode Backgrand donc changer le text
-      $rootScope.$broadcast('bbAlerteFin');
+    $rootScope.idVisu = null;
+    // Indique qu'il y a plus d'allerte dans le mode Backgrand donc changer le text
+    $rootScope.$broadcast('bbAlerteFin');
 
-      // effectuer la conection des patient pas encor connecté
-      //alert("length: "+ $rootScope.mesPatients.length + "  idTemp: " + $scope.nbPatientTemp);
-      if($rootScope.mesPatients.length > $scope.nbPatientTemp){
-        $scope.connexionSocket($rootScope.mesPatients[$scope.nbPatientTemp].mip, $rootScope.mesPatients[$scope.nbPatientTemp].mport, $scope.nbPatientTemp, $rootScope.mesPatients.length -1);
-      }
-      // Mais a jour la variable tempon
-      $scope.nbPatientTemp = $rootScope.mesPatients.length;
+		//if($scope.bdd_ok == true)
+		//{
+			// effectuer la conection des patient pas encor connecté
+			//alert("length: "+ $rootScope.mesPatients.length + "  idTemp: " + $scope.nbPatientTemp);
+			if($rootScope.mesPatients.length > $scope.nbPatientTemp){
+				$scope.connexionSocket($rootScope.mesPatients[$scope.nbPatientTemp].mip, $rootScope.mesPatients[$scope.nbPatientTemp].mport, $scope.nbPatientTemp, $rootScope.mesPatients.length -1);
+			}
+			// Mais a jour la variable tempon
+			$scope.nbPatientTemp = $rootScope.mesPatients.length;
+		//}
   });
+
+	$scope.$on('BddOK', function(event, args) {
+		// effectuer la conection des patient pas encor connecté
+		//alert("length: "+ $rootScope.mesPatients.length + "  idTemp: " + $scope.nbPatientTemp);
+		if($rootScope.mesPatients.length > $scope.nbPatientTemp){
+			$scope.connexionSocket($rootScope.mesPatients[$scope.nbPatientTemp].mip, $rootScope.mesPatients[$scope.nbPatientTemp].mport, $scope.nbPatientTemp, $rootScope.mesPatients.length -1);
+		}
+		// Mais a jour la variable tempon
+		$scope.nbPatientTemp = $rootScope.mesPatients.length;
+		console.log('2');
+		$scope.bdd_ok = true;
+	});
 
 // ----------------------------------------- Fonctiopn ---------------------------------------------------------------------------------------------------
 
   // Fonction qui effetue la conection WebSocket
   $scope.connexionSocket = function(ip, port, i, nb) {
-		Socket.connect("http://"+ ip + ":" + port).then(
+		Socket.connect("ws://"+ ip + ":" + port).then(
 			// Connection Accept
 			function (data){},
 			// Connection Reject
 			function (data){
 				if(data == "unconnected"){
-					alert("Erreur de connexion! Veillez veriffier vos données");
+					//alert("Erreur de connexion! Veillez veriffier vos données");
           //Change l'icone du patient
 					$rootScope.mesPatients[i].etat = 0;
           // effectue la conection des patients suivant si il y en a
@@ -65,17 +81,17 @@ app.controller("homeCtrl", function( $scope, $rootScope, $state, $ionicListDeleg
   						transaction.executeSql(executeQuery, [$rootScope.mesPatients[i].nom, $rootScope.mesPatients[i].mip, $rootScope.mesPatients[i].mport]
   						// Accept
   						, function(tx, result) {
-                alert("insertion ok");
+                //alert("insertion ok");
   							// Recupère l'id du patient
   							transaction.executeSql('SELECT * FROM BbSensor', [], function (tx, results) {
                   $rootScope.mesPatients[i].id = results.rows.item(results.rows.length-1).id;
                   // Si c'est pour un ajout de patient
                   if($rootScope.etatAddModif == "add"){
-                    alert('Le nouveau patient a été ajouté');
+                    //alert('Le nouveau patient a été ajouté');
                   }
                   // Si c'est pour une modification de patient
                   else{
-                    alert('Le patient a été modifier');
+                    //alert('Le patient a été modifier');
                   }
   							}, null);
   						},
@@ -101,7 +117,7 @@ app.controller("homeCtrl", function( $scope, $rootScope, $state, $ionicListDeleg
 						$rootScope.mesPatients[i].Fc = data.value;
 
 						// Si Fc == 1 et que le patient est pas en allerte et que l'id visité n'est pas l'id du patient
-						if(($rootScope.mesPatients[i].Fc == 1) && ($rootScope.mesPatients[i].etat != 2) && (i != $rootScope.idVisu))
+						if(($rootScope.mesPatients[i].Fc >= 100) && ($rootScope.mesPatients[i].etat != 2) && (i != $rootScope.idVisu))
 						{
 							// Change l'icone du patient en alerte
 							$rootScope.mesPatients[i].etat = 2;
@@ -145,10 +161,11 @@ app.controller("homeCtrl", function( $scope, $rootScope, $state, $ionicListDeleg
 	// Fonction pour supprimer un passient du tableau de ListPatients
 	$scope.deletePatient = function(index)
 	{
+		//alert($rootScope.Paramgeneral.plagetemp);
 		// deconnaicte un ellement de la liste des sockets
-		Socket.connectionpatients[index].disconnect();
+		Socket.connectionpatients[index].close();
 
-		/*
+
 		// ia un truc a faire ----------------------------------------------------------------------
 		// Supprime un élément de la table
 		$rootScope.myDB.transaction(function(transaction)
@@ -163,7 +180,7 @@ app.controller("homeCtrl", function( $scope, $rootScope, $state, $ionicListDeleg
 				alert('Erreur de supression DB');
 			});
 		});
-		*/
+
 		$scope.lesPatients[index].supprimer = true;
 
 
@@ -171,6 +188,7 @@ app.controller("homeCtrl", function( $scope, $rootScope, $state, $ionicListDeleg
 	// Fonction pour modiffier les données d'un passient du tableau de ListPatients
 	$scope.modifPatient = function(index)
 	{
+		//alert(index)
     //$scope.deletePatient(index);
 		// va a la page modifListe en donnant l'id du passient celectionné
 		$state.go("modifList",{mIndex:index});
@@ -185,6 +203,13 @@ app.controller("homeCtrl", function( $scope, $rootScope, $state, $ionicListDeleg
 		$state.go("infoAlerte",{mIndex:index});
 		// Glisser pour ne plus afficher les boutons d'option
 		$ionicListDelegate.$getByHandle('liste-patients').closeOptionButtons();
+	}
+
+	// Fonction pour afficher les alertes d'un passient du tableau des alertes
+	$scope.ecg = function(index)
+	{
+		// va a la page infoAlerte en donnant l'id du passient celectionné
+		$state.go("infoPatient",{mIndex:index});
 	}
 
 

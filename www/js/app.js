@@ -6,6 +6,17 @@
 var app = angular.module('starter', ['ionic'])
 
 app.run(function($ionicPlatform, $rootScope) {
+  /*
+  // Setup the loader
+  $ionicLoading.show({
+    content: 'Loading',
+    animation: 'fade-in',
+    showBackdrop: true,
+    maxWidth: 200,
+    showDelay: 0
+  });
+  */
+
   $ionicPlatform.ready(function() {
     $rootScope.mesPatients = [];
 
@@ -28,7 +39,7 @@ app.run(function($ionicPlatform, $rootScope) {
 
 
     // Crée la table dans la base de donnée
-    $rootScope.myDB.transaction(function(transaction) 
+    $rootScope.myDB.transaction(function(transaction)
     {
       transaction.executeSql('CREATE TABLE IF NOT EXISTS BbSensor (id integer primary key, Nom text, IP text, Port text)', [],
       // Accept
@@ -51,6 +62,7 @@ app.run(function($ionicPlatform, $rootScope) {
               $rootScope.mesPatients.push(mpatient);
             }
           }
+          $rootScope.$broadcast('BddOK');
         }, null);
       },
       // Error
@@ -58,6 +70,7 @@ app.run(function($ionicPlatform, $rootScope) {
         alert("Erreur lors de la création de la table");
       });
     });
+
   });
 })
 

@@ -1,5 +1,4 @@
 app.service('Socket', function($rootScope, $q, ListPatients){
-	console.log("Je suis ton service");
 	var deferred;
 
 	this.connectionpatients = [];
@@ -8,6 +7,34 @@ app.service('Socket', function($rootScope, $q, ListPatients){
 
 	this.connect = function (adresse) {
 		var deferred = $q.defer();
+
+
+		var socketFC = new WebSocket(adresse, "freq1");
+		this.connectionpatients.push(socketFC);
+		socketFC.onopen = function (event) {
+		  deferred.notify('connected');
+		};
+
+
+		socketFC.onclose = function (event) {
+		  deferred.reject('unconnected');
+		};
+
+		socketFC.onerror = function (event) {
+			console.log("Connection imposible");
+			deferred.reject('unconnected');
+		};
+
+
+		socketFC.onmessage=function(event) {
+		    //var data = JSON.parse(event.data);
+				console.log(event.data);
+				deferred.notify({type:"bpm", value:event.data});
+
+		};
+
+
+		/*
 
 		var nb_patient = this.connectionpatients.push(io.connect(adresse,
 		{
@@ -49,6 +76,8 @@ app.service('Socket', function($rootScope, $q, ListPatients){
 	  	this.connectionpatients[nb_patient-1].on('satur_sec', function(data) {
 			deferred.notify({type:"satur", value:data});
 	  	});
+
+*/
 
 		return deferred.promise;
 	};
