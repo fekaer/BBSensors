@@ -19,6 +19,7 @@ app.run(function($ionicPlatform, $rootScope) {
 
   $ionicPlatform.ready(function() {
     $rootScope.mesPatients = [];
+    $rootScope.bdd_ok = false;
 
     if(window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -62,6 +63,7 @@ app.run(function($ionicPlatform, $rootScope) {
               $rootScope.mesPatients.push(mpatient);
             }
           }
+          // indique a home que la BDD est prête
           $rootScope.$broadcast('BddOK');
         }, null);
       },
@@ -126,5 +128,5 @@ app.config(function($stateProvider,$urlRouterProvider) {
 
 
 	// Etat par defaut (la page de demarage)
-	$urlRouterProvider.otherwise("/start")
+	$urlRouterProvider.otherwise("/home")
 });
