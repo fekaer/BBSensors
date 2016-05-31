@@ -1,19 +1,15 @@
 // controleur du Weather
-app.controller("addPatientCtrl", function($scope, $rootScope, $state, $stateParams, $interval, ListPatients, Socket, Notification, $ionicHistory){
+app.controller("addPatientCtrl", function($scope, $rootScope, $state, $stateParams, $interval, ListPatients, BDD, Socket, Notification, $ionicHistory){
 
-	$scope.patient = {id: null, nom:'', Fc: 0, SpOz: 0, FR: 0, mip: "192.168.2.7", mport: 5000, clignote:false, supprimer: false, etat: 0};
-
+	$scope.newPatient = {};
+	angular.copy(ListPatients.modelPatient, $scope.newPatient);
 
 	$scope.addNewPatient = function()
 	{
-
-		//$scope.index = $rootScope.mesPatients.length;
 		// Ajoute mon nouvau patient
-		$rootScope.mesPatients.push($scope.patient);
-		// Indique a Home d'un ajout
-		$rootScope.etatAddModif = "add";
-		// Retoure a la page d'avent (Home)
-		$ionicHistory.goBack();
+		ListPatients.addPatient($scope.newPatient);
+		// Ajoute le patient dans la base de donnée
+		BDD.InsertPatientInBDD("INSERT INTO BbSensor (Nom, IP, Port) VALUES (?,?,?)", $scope.newPatient.nom, $scope.newPatient.ip, $scope.newPatient.port);
 	}
 
 

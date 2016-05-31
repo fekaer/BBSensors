@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 var app = angular.module('starter', ['ionic'])
 
-app.run(function($ionicPlatform, $rootScope) {
+app.run(function($ionicPlatform, $rootScope, BDD, ListPatients) {
   /*
   // Setup the loader
   $ionicLoading.show({
@@ -36,8 +36,18 @@ app.run(function($ionicPlatform, $rootScope) {
     }
 
     // Crée la base de donnée
-		$rootScope.myDB = window.sqlitePlugin.openDatabase ({name: "mySQLite.db", location: 'default'});
+		//$rootScope.myDB = window.sqlitePlugin.openDatabase ({name: "mySQLite.db", location: 'default'});
+    var mBdd = BDD.CreatBDD("mySQLite.db", 'default');
+    if(mBdd != false)
+    {
+      if(BDD.CreatTable('CREATE TABLE IF NOT EXISTS BbSensor (id integer primary key, Nom text, IP text, Port text)') != false)
+      {
+        BDD.SelectAllInBDD('SELECT * FROM BbSensor');
+      }
+    }
 
+
+    /*
 
     // Crée la table dans la base de donnée
     $rootScope.myDB.transaction(function(transaction)
@@ -72,6 +82,7 @@ app.run(function($ionicPlatform, $rootScope) {
         alert("Erreur lors de la création de la table");
       });
     });
+    */
 
   });
 })

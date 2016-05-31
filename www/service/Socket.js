@@ -8,7 +8,7 @@ app.service('Socket', function($rootScope, $q, ListPatients){
 	this.connect = function (adresse) {
 		var deferred = $q.defer();
 
-
+/*
 		var socketFC = new WebSocket(adresse, "freq1");
 		this.connectionpatients.push(socketFC);
 		socketFC.onopen = function (event) {
@@ -32,9 +32,8 @@ app.service('Socket', function($rootScope, $q, ListPatients){
 				deferred.notify({type:"bpm", value:event.data});
 
 		};
+*/
 
-
-		/*
 
 		var nb_patient = this.connectionpatients.push(io.connect(adresse,
 		{
@@ -77,7 +76,7 @@ app.service('Socket', function($rootScope, $q, ListPatients){
 			deferred.notify({type:"satur", value:data});
 	  	});
 
-*/
+
 
 		return deferred.promise;
 	};

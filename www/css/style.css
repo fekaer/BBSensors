@@ -44,6 +44,10 @@
   color : #B01919; /* rouge */
 }
 
+.ion-android-alert {
+  color : #e65c00; /* orange */
+}
+
 .circled_blue {
   color : blue !important;
 }/* Empty. Add your own CSS if you like */
