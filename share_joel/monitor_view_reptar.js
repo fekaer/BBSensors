@@ -1,26 +1,59 @@
-ServerEnum = {
-    REPTAR_WIFI: 0,
-    REPTAR_WIRE: 1,
-    PROXY: 2
-}
-
-const currentContext = ServerEnum.REPTAR_WIFI;
-
-
-function getAddress(){
+// The JoelSocket simplify the websocket management **************************************************
+function JoelSocket(){
     "use strict";
-    switch(currentContext){
-        case ServerEnum.REPTAR_WIFI:
-            return "ws://192.168.2.7:5000";
-        case ServerEnum.REPTAR_WIRE:
-            return "ws://192.168.1.24:5000";
-        case ServerEnum.PROXY:
-            return "ws://129.194.184.60:8085";
-    }
-};
 
+    var ServerEnum = {
+        REPTAR_WIFI: 0,
+        REPTAR_WIRE: 1,
+        PROXY: 2
+    }
+    // Context configuration
+    const currentContext = ServerEnum.REPTAR_WIFI;
+
+    function getAddress(){
+        switch(currentContext){
+            case ServerEnum.REPTAR_WIFI:
+                return "ws://192.168.2.7:5000";
+            case ServerEnum.REPTAR_WIRE:
+                return "ws://192.168.1.24:5000";
+            case ServerEnum.PROXY:
+                return "ws://129.194.184.60:8085";
+        }
+    }
+
+    // Register a function with a signal name. If the signal
+    // already exists, it register only the function and it doesn't create
+    // new sockets.
+    this.register = function(signalName, updateFunction) {
+        if(!(signalName in JoelSocket.updateAndSocketDictionary)){
+            var socket = new WebSocket(getAddress(), signalName);
+            JoelSocket.updateAndSocketDictionary[signalName] = {socket: socket, lstFunc: []};
+        }
+
+        // Add the new update function
+        JoelSocket.updateAndSocketDictionary[signalName].lstFunc.push(updateFunction);
+
+        // Change the callback function calling when a message arrive : update all functions
+        // register to the signal name.
+        JoelSocket.updateAndSocketDictionary[signalName].socket.onmessage = function(signal){
+            Array.from(JoelSocket.updateAndSocketDictionary[signalName].lstFunc).forEach(
+                function (update){
+                    update(signal.data);
+                }
+            );
+        };
+    }
+}
+// This is a static field helping to keep only one socket for each signal client 
+JoelSocket.updateAndSocketDictionary = {};
+// ***************************************************************************************************
+
+
+
+// Global function showing the signals ***************************************************************
 function monitorFunction(document) {
     "use strict";
+    
     const monitor = document.getElementById("monitor");
     const ctx = monitor.getContext("2d");
     ctx.fillStyle = "#dbbd7a";
@@ -32,6 +65,7 @@ function monitorFunction(document) {
     const SIZE_INFO = 40;
     const NB_BLOCK = 3;
     const OVERLAP_SIZE = 4;
+    const PIXEL_STEP = 2;
 
     // Information sur le côté du moniteur
     function drawInfo(txt, color, style, positionX) {
@@ -41,7 +75,6 @@ function monitorFunction(document) {
     }
 
     function drawWave() {
-
 
         function positionCenterY(no_block) {
             return ((no_block * 2) + 1) / (NB_BLOCK * 2) * monitor.height;
@@ -68,7 +101,6 @@ function monitorFunction(document) {
             Array.from(Array(10).keys()).forEach(function (i) {
                 drawLine(0, positionBottomY(i) + 0.5, monitor.width, positionBottomY(i) + 0.5);
             });
-
             drawLine(MARGIN_MONITOR_RIGHT + 5.5, 0, MARGIN_MONITOR_RIGHT + 5.5, monitor.height);
         }
 
@@ -80,46 +112,47 @@ function monitorFunction(document) {
             return Math.max(min, Math.min(max, value));
         }
 
-
         drawLines();
 
+
+
+
         // Class Signal :
-        // - position: position du signal (slot) sur le moniteur
+        // - monitorPosition: monitorPosition du signal (slot) sur le moniteur
+        // - signalPosition: position du signal dans le message reçu par le websocket
         // - info: Nom du signal abrégé
         // - signals: liste des informations reçues à affichier (flux continu de données et informations chaque seconde)
         // - color: Couleur du signal
-        // - scaleFunction: fonction pour l'affichage des limites du signal dans son slot
-        function Signal(position, info, signals, color, scaleFunction) {
+        // - scaleLead: fonction pour l'affichage des limites du signal dans son slot
+        function Signal(
+                monitorPosition,
+                signalPosition,
+                info, 
+                signals,
+                color, 
+                scaleLead) {
 
-            this.position = position;
             this.info = info;
             this.x = MARGIN_MONITOR_LEFT;
-            this.scaleFunction = scaleFunction;
             this.color = color;
-            this.value = [positionCenterY(this.position), 0];
-
-            // Configuration des sockets pour recevoir les signaux
-            var address = getAddress();
-            var sock1 = new WebSocket(address, signals[0]);
-            var sock2 = new WebSocket(address, signals[1]);
-
-            //this.socket = io.connect('http://192.168.1.28:8085');
-            sock1.onmessage = function (signal) {
-                this.drawFlowSignal(signal.data);
-            }.bind(this);
-            sock2.onmessage = function (signal) {
-                this.basicSignal(signal.data);
-            }.bind(this);
+            this.value = [positionCenterY(monitorPosition), 0];
 
             // Flux du signal
             this.drawFlowSignal = function (signal) {
                 ctx.lineWidth = "2";
-                this.x = (this.x - MARGIN_MONITOR_LEFT + 1)
+                this.x = (this.x - MARGIN_MONITOR_LEFT + PIXEL_STEP)
                         % (MARGIN_MONITOR_RIGHT - MARGIN_MONITOR_LEFT)
                         + MARGIN_MONITOR_LEFT;
                 ctx.strokeStyle = this.color;
-                this.value[1] = this.scaleFunction(signal);
-                drawLine(this.x - 1, this.value[0], this.x, this.value[1]);
+
+                signal = parseInt(-signal.split(";")[signalPosition]);
+                this.value[1] = scaleLead(signal);
+                this.value[1] = minMaxDraw(
+                        positionTopY(monitorPosition), 
+                        this.value[1] + positionCenterY(monitorPosition),
+                        positionBottomY(monitorPosition) + monitorPosition - 1);
+
+                drawLine(this.x - PIXEL_STEP, this.value[0], this.x, this.value[1]);
                 this.value[0] = this.value[1];
                 this.clearOverlap(this.x);
             };
@@ -127,33 +160,63 @@ function monitorFunction(document) {
             // Information ponctuelle
             this.basicSignal = function (signal) {
                 const topMargin = 20;
-                ctx.clearRect(MARGIN_MONITOR_RIGHT + 10, positionTopY(this.position) + topMargin, monitor.width - MARGIN_MONITOR_RIGHT, monitor.height / NB_BLOCK - MARGIN_BLOCK / 2 - topMargin);
-                drawInfo(signal, this.color, "bold " + SIZE_INFO + "px Arial", positionCenterY(this.position) + SIZE_INFO / 2);
+                ctx.clearRect(MARGIN_MONITOR_RIGHT + 10, positionTopY(monitorPosition) + topMargin, monitor.width - MARGIN_MONITOR_RIGHT, monitor.height / NB_BLOCK - MARGIN_BLOCK / 2 - topMargin);
+                
+                // Information textuelle du signal
+                drawInfo(this.info, this.color, "bold 16px Arial", positionCenterY(monitorPosition) - SIZE_INFO / 2);
+                signal = parseInt(signal.split(";")[signalPosition]);
+                drawInfo(signal, this.color, "bold " + SIZE_INFO + "px Arial", positionCenterY(monitorPosition) + SIZE_INFO / 2);
             };
-            this.basicSignal(0);
-
-            // Information textuelle du signal
-            drawInfo(this.info, this.color, "bold 16px Arial", positionCenterY(this.position) - SIZE_INFO / 2);
-
+            this.basicSignal("0;0");
+            
+            
             // Effaçage du signal précédent
             this.clearOverlap = function (x) {
                 // Condition utilisée pour effacer le début du signal 
-                const N = (x === MARGIN_MONITOR_LEFT) ? x - 3 : x;
-                ctx.clearRect(minMax(0, N + 1, MARGIN_MONITOR_RIGHT), positionTopY(this.position) + 2, OVERLAP_SIZE, positionBottomY(this.position) - positionTopY(this.position) - 4);
+                const N = (x === MARGIN_MONITOR_LEFT) ? x - 4 : x;
+                ctx.clearRect(
+                    minMax(0,
+                        N + 1,
+                        MARGIN_MONITOR_RIGHT),
+                    positionTopY(monitorPosition) + 2,
+                    OVERLAP_SIZE + PIXEL_STEP,
+                    positionBottomY(monitorPosition) - positionTopY(monitorPosition) - 4
+                );
             };
+
+            // Configuration des sockets pour recevoir les signaux
+            var js = new JoelSocket();
+            js.register(signals[0], this.drawFlowSignal.bind(this)); 
+            js.register(signals[1], this.basicSignal.bind(this)); 
 
         }
 
         // INSTANCES DES SIGNAUX AVEC FONCTION CALLBACK POUR AFFICHER LE SIGNAL
-        new Signal(0, "BPM1", ["lead1", "freq1"], "green", function (value) {
-            return minMaxDraw(positionTopY(0), parseInt(-value) / 200 + positionCenterY(0), positionBottomY(0) - 1);
-        });
+        new Signal(
+                0, 
+                0,
+                "BPM1",
+                ["lead", "freq"],
+                "green",
+                function (value) {
+                    return value / 200;
+                }
+        );
 
-        new Signal(1, "BPM2", ["lead2", "freq2"], "blue", function (value) {
-            return minMaxDraw(positionTopY(1), parseInt(-value) / 200 + positionCenterY(1), positionBottomY(1));
-        });
+        new Signal(
+                1,
+                1,
+                "BPM2",
+                ["lead", "freq"],
+                "blue",
+                function (value) {
+                    return value / 100;
+                }
+        );
     }
 
     drawInfo("BB Sensor v0.1", "gray", "bold 10px Arial", 12);
     drawWave();
 }
+// ***************************************************************************************************
+
