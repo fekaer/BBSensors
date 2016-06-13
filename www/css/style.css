@@ -1,5 +1,10 @@
 /* Empty. Add your own CSS if you like */
-
+/* POur le bouton enregistrer dans addpatient */
+.btEnregistre {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+}
 
 .info-patient .item-content {
 	padding-right: 16px;
@@ -13,8 +18,10 @@
 	float: left;
 }
 
+/* pour donner une taille a l'option menu de modifList */
 .momPopover{
-	height:18%;
+	/*height:1;*/
+	height:120px;
 }
 
 /* modifie l'icone de la liste de home */
@@ -22,8 +29,6 @@
 .info-patient i.icon{
 	margin-right: 15px;
   font-size: 30px;
-
-
 }
 
 
@@ -36,6 +41,7 @@
   margin-right: 30px;
 }
 
+/* icone de home */
 .ion-person {
   color : lime ;
 }
@@ -44,10 +50,25 @@
   color : #B01919; /* rouge */
 }
 
+.circled_blue {
+  color : blue !important;
+}
+
 .ion-android-alert {
   color : #e65c00; /* orange */
 }
 
 .circled_blue {
   color : blue !important;
-}/* Empty. Add your own CSS if you like */
+}
+
+/*
+#monitor {
+	background-color: black;
+	width: 100%;
+	height: 100%;
+	display:block;
+	position: absolute;
+}
+*/
+/* Empty. Add your own CSS if you like */

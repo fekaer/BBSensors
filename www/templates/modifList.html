@@ -1,112 +1,182 @@
-<ion-view view-title = "Modifier les donnees du patient">
+<ion-view view-title = "Modifier les données du patient">
 	<ion-content>
 
-		<div class="list">
-			<div class="item item-divider">
-				Patient
-			</div>
-      <label class="item item-input">
-        <span class="input-label">Nom</span>
-        <input type="text" ng-value="patient.nom" ng-model="patient.nom">
-      </label>
-			<label class="item item-input">
-				<span class="input-label">Chambre</span>
-				<input type="text" ng-value="'611b'" >
-			</label>
-    </div>
-
-		<div class="list" ng-show="test != true">
-			<div class="item item-divider">
-				Seuil
-			</div>
-			<label class="item item-input">
-
-				FC:
-				<br></br>
-				<br></br>
-				<div>
-					<span class="input-label">Min:</span>
-					<input type="number" ng-value="60">
+		<div class="General" ng-show="test == false">
+			<div class="list" >
+				<div class="item item-divider">
+			    Info patient
+			  </div>
+				<div class="item item-input-inset">
+					<span class="input-label">Nom :</span>
+		      <label class="item item-input-wrapper" ng-style="{'height':'20px'}">
+		        <input type="text" ng-value="patient.nom" ng-model="patient.nom">
+		      </label>
 				</div>
-				<div>
-					<span class="input-label">Max:</span>
-					<input type="number" ng-value="100">
+				<div class="item item-input-inset">
+					<span class="input-label">Chambre :</span>
+					<label class="item item-input-wrapper" ng-style="{'height':'20px'}">
+						<input type="text" ng-value="patient.chambre" ng-model="patient.chambre" >
+					</label>
 				</div>
-			</label>
-			<label class="item item-input">
-
-				FR:
-				<br></br>
-				<br></br>
-				<div>
-					<span class="input-label">Min:</span>
-					<input type="number" ng-value="14">
-				</div>
-				<div>
-					<span class="input-label">Max:</span>
-					<input type="number" ng-value="20">
-				</div>
-			</label>
-			<label class="item item-input">
-
-				Sp02:
-				<br></br>
-				<br></br>
-				<div>
-					<span class="input-label">Min:</span>
-					<input type="number" ng-value="95">
-				</div>
-				<div>
-					<span class="input-label">Max:</span>
-					<input type="number" ng-value="100">
-				</div>
-			</label>
-		</div>
-
-		<div class="list" ng-show="test != false">
-			<div class="item item-divider">
-				Scanner
-			</div>
-			<label class="item item-input item item-button-right">
-				<span class="input-label">Associer Moniteur</span>
-				<button class="button button-light">
-					<img class="logo-image" src="img/qr_code-512.png">
+				<button class="button button-full button-energized" ng-click = "codeBar()">
+					Associer patient (code barre)
 				</button>
-			</label>
-			<label class="item item-input item item-button-right">
-				<span class="input-label">Associer Patient</span>
-				<button class="button button-light">
-					<img class="logo-image" src="img/codeBare.png">
+				<!--
+				<label class="item item-input item item-button-left" ng-style="{'height':'55px'}" ng-click = "codeBar()">
+					<button class="button button-light" >
+						<img class="logo-image" src="img/codeBare.png">
+					</button>
+					<span class="input-label" ng-style="{'margin-left': '18%'}">Associer Patient</span>
+				</label>
+			-->
+
+
+				<div class="item item-divider">
+					Info moniteur
+				</div>
+				<div class="item item-input-inset">
+					<span class="input-label">IP :</span>
+					<label class="item item-input-wrapper" ng-style="{'height':'20px'}">
+						<input type="text" ng-value="patient.ip" ng-model="patient.ip">
+					</label>
+				</div>
+				<div class="item item-input-inset">
+					<span class="input-label">Port :</span>
+					<label class="item item-input-wrapper" ng-style="{'height':'20px'}">
+						<input type="number" ng-value="patient.port" ng-model="patient.port" >
+					</label>
+				</div>
+
+				<button class="button button-full button-energized" ng-click = "qrCode()">
+					Associer moniteur (QRCode)
 				</button>
-			</label>
+
+				<!--
+				<label class="item item-input item item-button-left" ng-style="{'height':'57px'}" ng-click = "qrCode()">
+					<button class="button button-light">
+						<img class="logo-image" src="img/qr_code-512.png">
+					</button>
+					<span class="input-label" ng-style="{'margin-left': '18%'}">Associer Moniteur</span>
+				</label>
+				-->
+			</div>
+
+			<button class="button button-positive" ng-style="{'float':'left'}" ng-click = "modifPatient()">
+				Enregistrer
+			</button>
 		</div>
 
 
-		<button class = "button button-block button-positive" ng-click = "modifPatient()">
-			modiffier
-		</button>
+
+
+		<div class="Seuil" ng-show="test == true">
+			<div class="list">
+				<div class="item item-divider">
+					Seuil des alertes
+				</div>
+				<label class="item">
+					Fréquence cardiaque:
+					<table>
+						<tr>
+							<td>
+								<label class="item item-input item-stacked-label">
+									<span class="input-label">Min:</span>
+									<input type="text" ng-value="seuils.FCmin" ng-model="seuils.FCmin">
+								</label>
+							</td>
+							<td>
+								<label class="item item-input item-stacked-label">
+									<span class="input-label">Max:</span>
+									<input type="text" ng-value="seuils.FCmax" ng-model="seuils.FCmax">
+								</label>
+							</td>
+						</tr>
+					</table>
+				</label>
+				<label class="item">
+					Fréquence respiratoire:
+					<table>
+						<tr>
+							<td>
+								<label class="item item-input item-stacked-label">
+									<span class="input-label">Min:</span>
+									<input type="text" ng-value="seuils.FRmin" ng-model="seuils.FRmin">
+								</label>
+							</td>
+							<td>
+								<label class="item item-input item-stacked-label">
+									<span class="input-label">Max:</span>
+									<input type="text" ng-value="seuils.FRmax" ng-model="seuils.FRmax">
+								</label>
+							</td>
+						</tr>
+					</table>
+				</label>
+				<label class="item">
+					Saturation en oxygène:
+					<table>
+						<tr>
+							<td>
+								<label class="item item-input item-stacked-label">
+									<span class="input-label">Min:</span>
+									<input type="text" ng-value="seuils.SP02min" ng-model="seuils.SP02min">
+								</label>
+							</td>
+							<td>
+								<label class="item item-input item-stacked-label">
+									<span class="input-label">Max:</span>
+									<input type="text" ng-value="seuils.SP02max" ng-model="seuils.SP02max">
+								</label>
+							</td>
+						</tr>
+					</table>
+				</label>
+			</div>
+
+			<button class="button button-positive" ng-style="{'float':'left'}" ng-click="modifSeuil()">
+			  Enregistrer
+			</button>
+		</div>
+
+
+
 	</ion-content>
 
+
+
+	<!-- Option bouton en haut a droite-->
+<!--
 	<script id="templates/popover.html" type="text/ng-template">
 		<ion-popover-view class=momPopover>
 			<ion-content>
 				<div class="list">
-					<a class="item" ng-click="baba()" target="_blank">
+					<a class="item" ng-click="seuil()" target="_blank">
 						Seuil alarme
 					</a>
-					<a class="item" ng-click="bibi()" target="_blank">
+					<a class="item" ng-click="associer()" target="_blank">
 						Associer
 					</a>
 				</div>
 			</ion-content>
 		</ion-popover-view>
 	</script>
-
-
-
+-->
 	<!-- Ajoute un nouveau bouton a droite pour l'ajout de patient -->
+<!--
 	<ion-nav-buttons side="right" >
-		<!-- indique que c'est un bouton menu et qui ammenne a "addPatient" -->
 		<button class="button button-icon ion-android-more-vertical" ng-click="popover.show($event)"></button>
 	</ion-nav-buttons>
+-->
+
+
+
+
+	<div class="tabs tabs-icon-only">
+	  <a class="tab-item" ng-click="associer()">
+	    Informations générales
+	  </a>
+	  <a class="tab-item" ng-click="seuil()">
+	    Seuils des allertes
+	  </a>
+	</div>
 </ion-view>

@@ -1,19 +1,15 @@
 app.service('ListPatients', function($rootScope){
 
+	this.Paramgeneral = {};
+
 	this.patients = [];
 	// joel
 	//$scope.patient = {id: null, nom:'', Fc: 0, SpOz: 0, FR: 0, mip: "192.168.2.7", mport: 5000, clignote:false, supprimer: false, etat: 0};
 	// moi
 	//$scope.newPatient = {id: null, nom:'', Fc: 0, SpOz: 0, FR: 0, ip: "129.194.185.76", port: null, clignote:false, supprimer: false, etat: 0};
-	this.modelPatient = {id: null, nom:'', Fc: 0, SpOz: 0, FR: 0, ip: "", port: "", clignote:false, supprimer: false, etat: 0};
+	this.modelPatient = {id: null, nom:'', chambre:'', Fc: 0, SpOz: 0, FR: 0, ip: "", port: null, clignote:false, supprimer: false, etat: 0, alertes:[], seuils:{}, inervalFunc:null};
 
-
-
-	this.modifPatient = function (index, patient) {
-		$rootScope.mesPatients[index].supprimer = true;
-		$rootScope.mesPatients.push(patient);
-		//this.mesPatients[index] = patient;
-	};
+	this.modelPatient.seuils = {FCmin: 60, FCmax:100, FRmin: 30, FRmax: 50, SP02min: 90, SP02max: 100};
 
 
 
@@ -39,10 +35,13 @@ app.service('ListPatients', function($rootScope){
 			angular.copy(this.modelPatient, mpatient);
 			mpatient.id = valeur.item(i).id;
 			mpatient.nom = valeur.item(i).Nom;
+			mpatient.chambre = valeur.item(i).Chambre;
 			mpatient.ip = valeur.item(i).IP;
 			mpatient.port = valeur.item(i).Port;
 
 			this.addPatient(mpatient);
 		}
+
+
 	};
 });
