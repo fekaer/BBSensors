@@ -3,7 +3,11 @@ app.controller("homeCtrl", function( $scope, $rootScope, $state, $ionicListDeleg
 	$scope.lesPatients = [];
 
 	// Paramerte General
+
 	$rootScope.Paramgeneral = {plagetemp:1, delaisAlertRes:30};
+
+
+	//$rootScope.Paramgeneral = {plagetemp:2, delaisAlertRes:30};
 
 
   // Variable tempon du nb patient dans le tableau pour savoir si il faut effectuer une connection
@@ -99,6 +103,51 @@ app.controller("homeCtrl", function( $scope, $rootScope, $state, $ionicListDeleg
 		{
 			$scope.$apply();
 		}
+
+	}
+
+	$scope.alerm = function(data, id){
+		if(data == 'connect')
+		{
+			console.log('alerm connection');
+		}
+
+		if(data == 'disconnect')
+		{
+			console.log(' alarm deconection');
+		}
+
+		// si ce n'est pas le message de conection ni le message de déconnection
+		if((data != 'connect') && (data != 'disconnect'))
+		{
+			if(data.search("NEW_FREQ:") != -1)
+			{
+				console.log('New Freq recu');
+				var val = data.replace("NEW_FREQ:", "");
+				val = val.split(";");
+				ListPatients.patients[id].seuils.FCmin = parseInt(val[0]);
+				ListPatients.patients[id].seuils.FCmax = parseInt(val[1]);
+			}
+
+			if(data == 'MIN_FREQ')
+			{
+				console.log('MIN_FREQ');
+
+				seuil = "< " + ListPatients.patients[id].seuils.FCmin;
+
+				Alertes.indiqueAlerte(id, seuil);
+			}
+
+			if(data == 'MAX_FREQ')
+			{
+				console.log('MAX_FREQ');
+
+				var seuil = "> " + ListPatients.patients[id].seuils.FCmax;
+
+				Alertes.indiqueAlerte(id, seuil);
+			}
+		}
+
 	}
 
 	$scope.alerm = function(data, id){
@@ -143,8 +192,6 @@ app.controller("homeCtrl", function( $scope, $rootScope, $state, $ionicListDeleg
 			}
 		}
 	}
-
-
 
 	// Gestion de l'option general
 

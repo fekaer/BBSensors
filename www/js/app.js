@@ -47,8 +47,6 @@ app.run(function($ionicPlatform, $rootScope, BDD, ListPatients) {
       }
     }
 
-
-
   });
 })
 
