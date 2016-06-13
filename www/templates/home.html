@@ -15,17 +15,17 @@
 								<!-- Cela me permet de changer d'icon quand notification est a true ou a false-->
 										<!-- Cela me permet de clignoter l'icon quand clignote est a true-->
 				<div class= "bouton-du-patient" >
-					<i class="icon" ng-class="{'ion-social-rss-outline': p.etat == 0, 'ion-person': p.etat == 1, 'ion-alert-circled': p.etat == 2 , 'ion-android-alert': p.etat == 3, 'ion-alert-circled circled_blue': p.clignote == true}" ng-click="infoAlerte($index)" ></i>
+					<i class="icon" ng-class="{'ion-social-rss-outline': p.etat == 0, 'ion-person': p.etat == 1, 'ion-alert-circled': p.etat == 2, 'ion-alert-circled circled_blue': p.clignote == true, 'ion-android-alert': p.etat == 3, 'ion-alert-circled circled_blue': p.clignote == true}" ng-click="infoAlerte($index)" ></i>
 					<i class="icon ion-ios-pulse-strong calm"  ng-click="ecg($index)" ></i>
 				</div>
 				<div class= "info-du-patient" >
 					<h2>
-						Nom: {{p.nom}}
+						{{p.nom}}
 					</h2>
 					<p>
 						<span>Fc: {{p.Fc}}</span>
-						<span>SpOz: {{p.SpOz}}</span>
-						<span>FR {{p.FR}}</span>
+						<span>SpO2: {{p.SpOz}}</span>
+						<span>FR: {{p.FR}}</span>
 					</p>
 				</div>
 
@@ -43,8 +43,6 @@
 				</ion-option-button>
 			</ion-item>
 		</ion-list>
-
-
 	</ion-content>
 
 

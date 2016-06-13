@@ -1,83 +1,74 @@
 app.service('Socket', function($rootScope, $q, ListPatients){
-	var deferred;
 
 	this.connectionpatients = [];
 
 
-
-	this.connect = function (adresse) {
-		var deferred = $q.defer();
-
-/*
-		var socketFC = new WebSocket(adresse, "freq1");
-		this.connectionpatients.push(socketFC);
-		socketFC.onopen = function (event) {
-		  deferred.notify('connected');
-		};
-
-
-		socketFC.onclose = function (event) {
-		  deferred.reject('unconnected');
-		};
-
-		socketFC.onerror = function (event) {
-			console.log("Connection imposible");
-			deferred.reject('unconnected');
-		};
-
-
-		socketFC.onmessage=function(event) {
-		    //var data = JSON.parse(event.data);
-				console.log(event.data);
-				deferred.notify({type:"bpm", value:event.data});
-
-		};
-*/
-
-
-		var nb_patient = this.connectionpatients.push(io.connect(adresse,
-		{
-			//secure:true, // pour du https
-			'reconnectionAttempts':1, // nb tentative de connection
-			'reconnectionDelay':50,  // toute les Xms
-			'force new connection':true // force la connection
-
-		}));
-
-	  	this.connectionpatients[nb_patient-1].on('connect', function(data) {
-			deferred.notify('connected');
-	  	});
-
-	  	this.connectionpatients[nb_patient-1].on('reconnect_failed', function(data) {
-			deferred.reject('unconnected');
-	  	});
-
-	  	this.connectionpatients[nb_patient-1].on('message', function(data) {
-			deferred.notify(data);
-	  	});
-
-
-
-
-
-
-
-
-	  	// Serveur Joël
-	  	this.connectionpatients[nb_patient-1].on('bpm_sec', function(data) {
-			deferred.notify({type:"bpm", value:data});
-	  	});
-
-	  	this.connectionpatients[nb_patient-1].on('resp_sec', function(data) {
-			deferred.notify({type:"resp", value:data});
-	  	});
-
-	  	this.connectionpatients[nb_patient-1].on('satur_sec', function(data) {
-			deferred.notify({type:"satur", value:data});
-	  	});
-
-
-
-		return deferred.promise;
+	this.construct = function(adresse) {
+		return new JoelSocket(adresse);
 	};
+
+
+	this.connect = function(adresse){
+		var js = new JoelSocket(adresse);
+		this.connectionpatients.push(js);
+	};
+
+
+
+
+	// The JoelSocket simplify the websocket management **************************************************
+  function JoelSocket(adresse){
+    //"use strict";
+		var updateAndSocketDictionary = {};
+		this.MySocketDictionary = updateAndSocketDictionary;
+    // Register a function with a signal name. If the signal
+    // already exists, it register only the function and it doesn't create
+    // new sockets.
+    this.register = function(signalName, updateFunction, id)
+    {
+      // si la connection n'est pas encore etablie
+      if(!(signalName in updateAndSocketDictionary)){
+        var socket = new WebSocket(adresse, signalName);
+        updateAndSocketDictionary[signalName] = {socket: socket, lstFunc: [], id: id};
+      }
+
+      // Add the new update function
+      updateAndSocketDictionary[signalName].lstFunc.push(updateFunction);
+
+			updateAndSocketDictionary[signalName].socket.onopen = function(signal){
+				updateAndSocketDictionary[signalName].lstFunc.forEach(
+					function (update){
+						update('connect', updateAndSocketDictionary[signalName].id);
+					}
+				);
+
+			};
+
+      // Change the callback function calling when a message arrive : update all functions
+      // register to the signal name.
+      updateAndSocketDictionary[signalName].socket.onmessage = function(signal){
+        updateAndSocketDictionary[signalName].lstFunc.forEach(
+          function (update){
+            update(signal.data, updateAndSocketDictionary[signalName].id);
+          }
+        );
+
+      };
+
+			// Send -1 in the function if socket closed
+			updateAndSocketDictionary[signalName].socket.onclose = function(){
+				updateAndSocketDictionary[signalName].lstFunc.forEach(
+					function (update){
+						update('disconnect', updateAndSocketDictionary[signalName].id);
+					}
+				);
+
+			};
+    }
+
+    this.send = function (signalName, value) {
+      var socket = updateAndSocketDictionary[signalName].socket;
+      socket.send(value);
+    }
+  }
 });

@@ -1,28 +1,26 @@
 <!-- Indique le nom de la vue-->
-<ion-view view-title = "Information Alerte">
+<ion-view view-title = "Alertes">
 	<!-- Indique le contenu de la vue -->
 	<ion-content >
-		<ion-list delegate-handle="info-alertes"> 
-			<ion-item  class="info-alert" ng-repeat="al in lesAlertes" >
-				<h2>Alerte du : {{al.date}}</h2>
-				<p> 
+		<ion-list show-delete="data.showDelete">
+			<ion-item  class="item-remove-animate info-alert" ng-repeat="al in lesAlertes" >
+				<h2>{{al.date}}</h2>
+				<p>
 					<span>
-						tipe : {{al.tipe}}
-					</span> 
-					<span>
-						descriptif : {{al.descriptif}}
-					</span> 
+						{{al.descriptif}}
+					</span>
 				</p>
-				<!-- ajoute un option bouton a ma liste  
-				et lui donne une icone. Quand je clique sur le bouton, effectuer la fonction deletePatient du controleur homectrl et donne l'index de la liste en entrée -->
-				<ion-option-button
-					class = "button-assertive icon ion-trash-a" ng-click="deleteAlerte($index)">
-				</ion-option-button>
-
+				<ion-delete-button
+					class="ion-minus-circled" ng-click="deleteAlerte($index)">
+        </ion-delete-button>
 			</ion-item>
 		</ion-list>
-		<button class="button button-energized icon ion-model-s" ng-click="addAlerte()"></button>
+		<button class="button button-full  button-assertive icon-left ion-trash-a" ng-click="deleteAll()">Tout supprimer</button>
+
 	</ion-content>
 
-
+	<!-- Ajoute un nouveau bouton a droite pour suprimer les alertes -->
+	<ion-nav-buttons side="right" >
+			<button class="button button-icon icon ion-ios-minus-outline" ng-click="data.showDelete = !data.showDelete"></button>
+	</ion-nav-buttons>
 </ion-view>

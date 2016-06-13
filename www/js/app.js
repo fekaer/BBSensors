@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var app = angular.module('starter', ['ionic'])
+var app = angular.module('starter', ['ionic', 'ngCordova'])
 
 app.run(function($ionicPlatform, $rootScope, BDD, ListPatients) {
   /*
@@ -35,54 +35,40 @@ app.run(function($ionicPlatform, $rootScope, BDD, ListPatients) {
       StatusBar.styleDefault();
     }
 
+    $rootScope.Paramgeneral = {plagetemp:1, delaisAlertRes:30};
+
     // Crée la base de donnée
 		//$rootScope.myDB = window.sqlitePlugin.openDatabase ({name: "mySQLite.db", location: 'default'});
     var mBdd = BDD.CreatBDD("mySQLite.db", 'default');
     if(mBdd != false)
     {
-      if(BDD.CreatTable('CREATE TABLE IF NOT EXISTS BbSensor (id integer primary key, Nom text, IP text, Port text)') != false)
+      if(BDD.CreatTable('CREATE TABLE IF NOT EXISTS BbSensor (id integer primary key, Nom text, Chambre text, IP text, Port integer)') != false)
       {
         BDD.SelectAllInBDD('SELECT * FROM BbSensor');
       }
     }
 
-
-    /*
-
-    // Crée la table dans la base de donnée
-    $rootScope.myDB.transaction(function(transaction)
+    //Memorise les parametre general
+    if(window.localStorage.getItem('plagetemp') == undefined)
     {
-      transaction.executeSql('CREATE TABLE IF NOT EXISTS BbSensor (id integer primary key, Nom text, IP text, Port text)', [],
-      // Accept
-      function(tx, result)
-      {
-        // Recupère tous de la table BbSensor
-        transaction.executeSql('SELECT * FROM BbSensor', [], function (tx, results)
-        {
-          var len = results.rows.length;
-          var i;
-          if(len > 0)
-          {	//ajout au tableau mesPatients les patient mémorisé dans la BDD
-            for (i = 0; i < len; i++)
-            {
-              var mpatient = {id: null, nom:'', Fc: 0, SpOz: 0, FR: 0, mip: "", mport: "", clignote:false, supprimer: false, etat: 0};
-              mpatient.id = results.rows.item(i).id;
-              mpatient.nom = results.rows.item(i).Nom;
-              mpatient.mip = results.rows.item(i).IP;
-              mpatient.mport = results.rows.item(i).Port;
-              $rootScope.mesPatients.push(mpatient);
-            }
-          }
-          // indique a home que la BDD est prête
-          $rootScope.$broadcast('BddOK');
-        }, null);
-      },
-      // Error
-      function(error) {
-        alert("Erreur lors de la création de la table");
-      });
-    });
-    */
+      window.localStorage.setItem('plagetemp', 1);
+      $rootScope.Paramgeneral.plagetemp = 1;
+    } else{
+      $rootScope.Paramgeneral.plagetemp = parseInt(window.localStorage.getItem('plagetemp'));
+    }
+    if(window.localStorage.getItem('delaisAlertRes') == undefined)
+    {
+      window.localStorage.setItem('delaisAlertRes', 30);
+      $rootScope.Paramgeneral.delaisAlertRes = 30;
+    } else{
+      $rootScope.Paramgeneral.delaisAlertRes = parseInt(window.localStorage.getItem('delaisAlertRes'));
+    }
+
+    // quand je clique sur enregistrer
+    $rootScope.enregistrParamGeneral = function() {
+      window.localStorage.setItem('plagetemp', $rootScope.Paramgeneral.plagetemp);
+      window.localStorage.setItem('delaisAlertRes', $rootScope.Paramgeneral.delaisAlertRes);
+    }
 
   });
 })

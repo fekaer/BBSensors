@@ -16,6 +16,8 @@
     <!-- ionic/angularjs js -->
     <script src="lib/ionic/js/ionic.bundle.js"></script>
 
+    <script src="js/ng-cordova.min.js"></script>
+
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
 
@@ -26,9 +28,9 @@
     <script src="service/Socket.js"></script>
     <script src="service/Background.js"></script>
     <script src="service/BDD.js"></script>
-    <script src="service/Scanner.js"></script>
     <script src="service/ListePatients.js"></script>
     <script src="service/Notification.js"></script>
+    <script src="service/Alertes.js"></script>
 
     <!-- Mes controlleurs............................................................................................. -->
     <script src="controllers/startCtrl.js"></script>
@@ -46,7 +48,7 @@
     <ion-side-menus>
   	  <ion-side-menu-content>
 
-  	    <ion-nav-bar class="bar-royal">
+  	    <ion-nav-bar class="bar-royal mynavbar">
   	        <ion-nav-back-button></ion-nav-back-button>
   	        <ion-nav-buttons side="left">
   	          <button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button>
@@ -55,7 +57,7 @@
   	    <ion-nav-view></ion-nav-view>
   	  </ion-side-menu-content>
   	  <ion-side-menu side="left">
-  			<h2> Option Générale </h2>
+  			<h2> Options Générales </h2>
   			<div class="list">
   			  <div class="item item-divider">
   			  	Plage Historique Alerte
@@ -65,20 +67,23 @@
   					<span class="input-label">
   						Plage de temps [min]
   					</span>
-  					<input id='nom' type="number" ng-model="Paramgeneral.plagetemp">
+  					<input type="number" ng-model="Paramgeneral.plagetemp">
   				</label>
 
   				<div class="item item-divider">
-  					Delais Alerte
+  					Délai Alerte
   				</div>
 
   				<label class="item item-input item-stacked-label">
   					<span class="input-label">
-  						Delais d'une alerte récente [min]
+  						Délai d'une alerte récente [sec]
   					</span>
-  					<input id='nom' type="number" ng-model="Paramgeneral.delaisAlertRes">
+  					<input type="number" ng-model="Paramgeneral.delaisAlertRes">
   				</label>
   			</div>
+        <button menu-close class="button button-positive" ng-click="enregistrParamGeneral()">
+          Enregistrer
+        </button>
   	  </ion-side-menu>
   	</ion-side-menus>
 
