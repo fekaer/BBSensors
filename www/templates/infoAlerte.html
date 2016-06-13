@@ -3,7 +3,7 @@
 	<!-- Indique le contenu de la vue -->
 	<ion-content >
 		<ion-list show-delete="data.showDelete">
-			<ion-item  class="item-remove-animate info-alert" ng-repeat="al in lesAlertes" >
+			<ion-item  class="item-remove-animate info-alert" ng-repeat="al in lesAlertes" ui-sref="^.graphAlert({mIndex: $index})">
 				<h2>{{al.date}}</h2>
 				<p>
 					<span>

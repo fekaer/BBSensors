@@ -1,0 +1,16 @@
+<ion-view view-title = "graphAlert">
+	<ion-content>
+		<div class="card">
+        <div class="item item-divider">
+            A line chart
+        </div>
+        <div class="item item-text-wrap">
+          <!-- <ion-scroll overflow-scroll="false" zooming="true" direction="x"> -->
+            <canvas id="lineZoom" height="300%" class="chart chart-line" chart-data="dataZoom" chart-labels="labelsZoom" chart-legend="true" chart-series="seriesZoom" chart-options="options"></canvas>
+          <!-- </ion-scroll> -->
+            <!-- <canvas  id="line" height="100%" on-swipe-right="onSwipeRight()" on-swipe-left="onSwipeLeft()" class="chart chart-line" chart-data="data" chart-labels="labels" chart-legend="false" chart-series="series" chart-click="onClick" chart-options="options"></canvas> -->
+            <canvas  id="line" height="100%" on-drag-right="onDragRight()" on-drag-left="onDragLeft()" class="chart chart-line" chart-data="data" chart-labels="labels" chart-legend="false" chart-series="series" chart-click="onClick" chart-options="options"></canvas>
+        </div>
+    </div>
+	</ion-content>
+</ion-view>
