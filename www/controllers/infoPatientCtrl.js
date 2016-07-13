@@ -1,19 +1,14 @@
 // controleur du Home
-app.controller("infoPatientCtrl", function( $scope, $rootScope, $state, $stateParams, Socket, ListPatients, $ionicHistory, Background)
+app.controller("infoPatientCtrl", function( $scope, $rootScope, $state, $stateParams, Socket, ListPatients, $ionicHistory)
 {
   $scope.index = $stateParams.mIndex;
 
   // Global function showing the signals ***************************************************************
   function monitorFunction(document) {
-    //"use strict";
-    //alert(window.innerHeight);
     var navbar = document.getElementsByClassName("mynavbar");
 
-  //  alert(navbar.height);
 
     const monitor = document.getElementById("monitor");
-    console.log(monitor.width);
-  //  monitor.height = window.innerHeight /2;
     const ctx = monitor.getContext("2d");
     ctx.fillStyle = "#dbbd7a";
     ctx.fill();
@@ -141,12 +136,6 @@ app.controller("infoPatientCtrl", function( $scope, $rootScope, $state, $statePa
           );
         };
 
-/*
-        // Configuration des sockets pour recevoir les signaux
-        var js = new JoelSocket();
-        js.register(signals[0], this.drawFlowSignal.bind(this));
-        js.register(signals[1], this.basicSignal.bind(this));
-*/
 
         var js = Socket.construct("ws://"+ ListPatients.patients[$scope.index].ip + ":" + ListPatients.patients[$scope.index].port);
         js.register(signals[0], this.drawFlowSignal.bind(this));
@@ -168,7 +157,6 @@ app.controller("infoPatientCtrl", function( $scope, $rootScope, $state, $statePa
     */
     }
 
-    //drawInfo("BB Sensor v0.1", "gray", "bold 10px Arial", 12);
     drawWave();
   }
 

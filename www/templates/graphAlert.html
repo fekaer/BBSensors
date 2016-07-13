@@ -1,15 +1,18 @@
-<ion-view view-title = "graphAlert">
+<ion-view view-title = "Signal Alerte">
 	<ion-content>
 		<div class="card">
-        <div class="item item-divider">
-            A line chart
-        </div>
         <div class="item item-text-wrap">
-          <!-- <ion-scroll overflow-scroll="false" zooming="true" direction="x"> -->
-            <canvas id="lineZoom" height="300%" class="chart chart-line" chart-data="dataZoom" chart-labels="labelsZoom" chart-legend="true" chart-series="seriesZoom" chart-options="options"></canvas>
-          <!-- </ion-scroll> -->
-            <!-- <canvas  id="line" height="100%" on-swipe-right="onSwipeRight()" on-swipe-left="onSwipeLeft()" class="chart chart-line" chart-data="data" chart-labels="labels" chart-legend="false" chart-series="series" chart-click="onClick" chart-options="options"></canvas> -->
-            <canvas  id="line" height="100%" on-drag-right="onDragRight()" on-drag-left="onDragLeft()" class="chart chart-line" chart-data="data" chart-labels="labels" chart-legend="false" chart-series="series" chart-click="onClick" chart-options="options"></canvas>
+					<!-- <ion-scroll overflow-scroll="false" zooming="true" direction="xy" style="width: 100%; height: 100%">
+						<div id ='myChart'></div>
+					</ion-scroll>
+				-->
+					<div id ='myChart'></div>
+					<h2> Ampltude </h2>
+					<div>
+						<button class = "button button-positive" ng-click = "clickBottom()" style="fontSize:200%"> +  </button>
+						<button class = "button button-positive" ng-click = "clickBottom2()" style="fontSize:200%"> -  </button>
+					</div>
+					<!-- <input type="range" name="volume" min="0" max="100" ng-value="33" ng-model="montest" ng-change="clickBottom()"> -->
         </div>
     </div>
 	</ion-content>

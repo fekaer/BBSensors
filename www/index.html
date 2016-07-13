@@ -26,6 +26,10 @@
     <script src="js/Chart.min.js"></script>
     <script src="js/angular-chart.min.js"></script>
 
+    <script src="js/zingchart.min.js"></script>
+
+    <script src="js/lodash.min.js"></script>
+
     <!-- your app's js -->
     <script src="js/app.js"></script>
 
@@ -34,7 +38,6 @@
     <script src="service/Background.js"></script>
     <script src="service/BDD.js"></script>
     <script src="service/ListePatients.js"></script>
-    <script src="service/Notification.js"></script>
     <script src="service/Alertes.js"></script>
 
     <!-- Mes controlleurs............................................................................................. -->
@@ -85,7 +88,18 @@
   					</span>
   					<input type="number" ng-model="Paramgeneral.delaisAlertRes">
   				</label>
+          <div class="item item-divider">
+  					Nombre d'alertes
+  				</div>
+
+  				<label class="item item-input item-stacked-label">
+  					<span class="input-label">
+  						Nombre d'alertes mémorisé
+  					</span>
+  					<input type="number" ng-model="Paramgeneral.nbAlertMem">
+  				</label>
   			</div>
+
         <button menu-close class="button button-positive" ng-click="enregistrParamGeneral()">
           Enregistrer
         </button>

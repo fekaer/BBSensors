@@ -4,12 +4,14 @@ app.service('ListPatients', function($rootScope){
 
 	this.patients = [];
 	// joel
-	//$scope.patient = {id: null, nom:'', Fc: 0, SpOz: 0, FR: 0, mip: "192.168.2.7", mport: 5000, clignote:false, supprimer: false, etat: 0};
+	//$scope.patient = {id: null, nom:'', Fc: 0, SpOz: 0, FR: 0, mip: "192.168.2.7", mport: 5000, clignote:false, supprimer: false, etatConnection: 0};
 	// moi
-	//$scope.newPatient = {id: null, nom:'', Fc: 0, SpOz: 0, FR: 0, ip: "129.194.185.76", port: null, clignote:false, supprimer: false, etat: 0};
-	this.modelPatient = {id: null, nom:'', chambre:'', Fc: 0, SpOz: 0, FR: 0, ip: "", port: null, clignote:false, supprimer: false, etat: 0, alertes:[], seuils:{}, inervalFunc:null};
+	//$scope.newPatient = {id: null, nom:'', Fc: 0, SpOz: 0, FR: 0, ip: "129.194.185.76", port: null, clignote:false, supprimer: false, etatConnection: 0};
+	this.modelPatient = {id: null, nom:'', chambre:'', Fc: 0, SpOz: 0, FR: 0, ip: "", port: null, clignote:false, supprimer: false, etatConnection: 0,
+												alarme: 0, timeoutAlarm:{}, alertes:[], seuils:{}, inervalFunc:null, socket:null, conectionOn:true};
 
 	this.modelPatient.seuils = {FCmin: 60, FCmax:100, FRmin: 30, FRmax: 50, SP02min: 90, SP02max: 100};
+	this.modelPatient.timeoutAlarm = {promiseTimeoutClignot: null, promiseTimeoutAlarmNonRes: null};
 
 
 

@@ -1,242 +1,172 @@
-app.controller("graphAlertCtrl", function($scope, $stateParams) {
+app.controller("graphAlertCtrl", function($scope, $stateParams, $ionicLoading, $rootScope, Alertes) {
+	var min = Alertes.dataSignalAlerte.dataMin;
+	var max = Alertes.dataSignalAlerte.dataMax;
+	console.log(min);
+	console.log(max);
+	//var tab_date = ["2016-06-03 14:43:12","2016-06-03 14:43:13","2016-06-03 14:43:14","2016-06-03 14:43:15",
+	"2016-06-03 14:43:16","2016-06-03 14:43:17","2016-06-03 14:43:18","2016-06-03 14:43:19","2016-06-03 14:43:20",
+	"2016-06-03 14:43:21","2016-06-03 14:43:22"];
 
-	$scope.index = $stateParams.mIndex;
+	    $scope.clickBottom = function(){
+				var val = ((max - min) * 10) / 100;
+				min = min + val;
+				max = max - val;
 
-	$scope.myChart = null;
-  $scope.positiontab = 0;
-  $scope.TotalData = [65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40,
-                        65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40,
-                          65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40,
-                            65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40];
+	      zingchart.exec('myChart', 'zoomin', {
+	        graphid: 0,
+	        //ymin: min,
+					//ymax: max
+
+	        zoomx: false,
+	        zoomy: true
+	      })
+	    };
+			$scope.clickBottom2 = function(){
+				var val = (((max - min) * 10) / 100) / 2;
+				min = min - val;
+				max = max + val;
+
+				zingchart.exec('myChart', 'zoomout', {
+					graphid: 0,
+					//ymin: min,
+					//ymax: max
+					zoomx: false,
+					zoomy: true
+				})
+			};
+
+	    var myConfig = {
+	      "gui":{
+	        "behaviors":[
+	            {
+									// retire l'option DownloadSVG
+	                "id":"DownloadSVG",
+	                "enabled":"none"
+	            },
+	            {
+	                "id":"Reload",
+	                "enabled":"none"
+	            },
+	            {
+	                "id":"SaveAsImage",
+	                "enabled":"none"
+	            },
+	            {
+	                "id":"Print",
+	                "enabled":"none"
+	            },
+	            {
+	                "id":"HideGuide",
+	                "enabled":"none"
+	            },
+	            {
+	                "id":"ViewSource",
+	                "enabled":"none"
+	            },
+	            {
+	                "id":"About",
+	                "enabled":"none"
+	            },
+	            {
+	              "id":"ShowAll",
+	              "enabled":"none"
+	            },
+	            {
+	              "id":"DownloadPDF",
+	              "enabled":"none"
+	            }/*,
+	            {   // Ajoute ceci au menu
+	                "id":"CrosshairHide",
+	                "enabled":"all"
+	            }
+	            */
+	        ]
+	       },
+	      "graphset": [{
+	        "type": "line",
+	        "title": {
+	          "text": "Historique",
+	          "font-family": "Georgia",
+	          "font-size": 16
+	        },
+	        "plot": {
+	          "aspect":"spline" ,
+	          "line-width": 1, // Taille de la ligne
+	          "line-color": "#666699", // couleur du trais
+	          "marker": {
+	            "size": 3, // taile des points
+	            "background-color": "#64b4ce #e0e0eb", // couleur des point
+	            "border-width": 1,
+	            "border-color": "#666699" // couleur du contour des points
+	          },
+	          "tooltip": {
+	            "visible": false
+	          }
+	        },
+	        "plotarea": {
+	          "margin-top": "15%", // Marge en decu du tableau
+	          "margin-bottom": "35%" // Marge en desous du tableau
+	        },
 
 
 
-  $scope.series = ['Series A'];
-  $scope.data = [[]];
-  $scope.labels = [];
-  // Position de la première valeur du tableau data
-  $scope.positiontab = $scope.TotalData.length/2-24;
-  for (var i = 0; i < 48; i++) {
-    $scope.data[0].push($scope.TotalData[$scope.positiontab+i])
-    $scope.labels.push(i);
-  }
+	        "scale-x": {
+	          "values": "0:" + Alertes.dataSignalAlerte.nbData + ":1", // data a afficher dans le second graph
+	          "max-items": 11, // nombre de point sur l'axe des X
+	          "zooming": true, // Indique q'on peux zoomer
+	          "zoom-to": [Alertes.dataSignalAlerte.nbData/2 -1000, Alertes.dataSignalAlerte.nbData/2 +1000], // valeur a afficher dans le tableau zoomé entres les 2 val
+	          "item": {
+	            "font-size": 10 // tailles des valeur x
+	          }
+	        },
+	        "preview": {
+	          "margin-bottom": "12%"
+	        },
+	        "crosshair-x": {
+	          "plot-label": {
+	            "text": "%v" // Affiche la valeur du point quand on clique decu
+	          },
+	          "scale-label": {
+	            "visible": true // affiche la valeur en x du point selectionné
+	          },
+	          "marker": {
+	            "size": 3, // taille du point quand on selectionne un point
+	            "background-color": "#64b4ce #ff3300", // couleur du point
+	            "border-width": 1,
+	            "border-color": "#666699" // Coiuleur du contour du point
+	          }
+	        },
 
-  $scope.dataZoom = [[65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56]];
-  $scope.labelsZoom = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+	        "scale-y": {
+						"zooming":true,
+						//"zoom-to":[min+1,max-1],
+	          "values": min + ":" + max + ":500", // valeur a afficher de 150 à 350 avec des saut de 50
+	          "guide": {
+	            "line-style": "dotted"
+	          },
+	          "item": {
+	            "font-size": 10 // taille des val axe Y
+	          }
+	        },
+	        "crosshair-y": {
+	          "type": "multiple",
+	          "scale-label": {
+	            "visible": true // affiche la valeur en y du point selectionné
+	          }
+	        },
+	        "series": [{
+						"values" : Alertes.dataSignalAlerte.data
+					}]
+	      }]
+	    };
+		zingchart.render({
+			id: 'myChart',
+			data: myConfig,
+			height: "100%",
+			width: "100%",
+		});
 
-  $scope.options = {
-    // Pour afficher la legende des point selectionné
-    showTooltips: false,
-    // Affichage adaptable
-    responsive: true,
-    //Affichage des point
-    pointDot : true,
-    // Rayon des points
-    pointDotRadius : 4,
-    // Pas afficher valeur axe Y
-    //scaleShowLabels:false,
-    // change la talle du texte des axes
-    //scaleFontSize: 0
-    // Desactive le mode animation
-    animation : false
-
-    // Affichage de la grille
-    //scaleShowGridLines: false,
-    // Couleur de la grille
-    //scaleGridLineColor: 'rgba(0, 0, 255, 0.5)',
-    // Afficher la grille Verticale
-    //scaleShowVerticalLines: true,
-    // Afficher la grille Horizontal
-    //scaleShowHorizontalLines: false,
-
-    // couleur sous la ligne
-    //fillColor : "rgba(151,187,205,0.2)",
-    // Couleur de la ligne
-    //strokeColor : "rgba(151,187,205,1)",
-    // couleur des point
-    //pointColor : "rgba(151,187,205,1)"
-
-  };
-
-
-
-
-
-  $scope.onClick = function (points, evt) {
-
-    console.log(evt.isTrusted + "  " + evt.screenX + "  " + evt.screenY + "  " + evt.clientX + "  " + evt.clientY);
-
-    // Vide les tableau
-    $scope.dataZoom[0].splice(0,$scope.dataZoom[0].length);
-    $scope.labelsZoom.splice(0,$scope.labelsZoom.length);
-
-    // Remais la couleur par défaut des points
-    for (var h = 0; h < $scope.data[0].length; h++) {
-      $scope.myChart.datasets[0].points[h].fillColor='rgba(151,187,205,1)'; // bleu claire
-    }
-
-    // Ajoute les nouvelle valeurs
-    for(var i = 0; i < points.length; i++)
-    {
-      // Change la couleur des point selectionnés
-      points[i].fillColor ="#00ff99"; //vert
-      $scope.dataZoom[0].push(points[i].value);
-      $scope.labelsZoom.push(points[i].label);
-    }
-    // met a jour le tableau
-    $scope.myChart.update();
-  };
-
-  // Fonction de creation du tableau
-  $scope.$on("create", function (evt, chart) {
-    // Si c'est le 2eme tableau
-    if(chart.id == "chart-1")
-    {
-      // Recupère le tableau
-      $scope.myChart = chart;
-    }
-    console.log(chart);
-  });
-
-  // Fonction de mise a jour du tableau
-  $scope.$on("update", function (evt, chart) {
-    console.log("salut");
-  });
-
-  // Fonction Swipe droit
-  $scope.onSwipeRight = function() {
-    console.log("GragRight");
-    // Suprime le dernier ellement
-    $scope.data[0].pop();
-    //Ajoute un ellement au debut
-    for (var i = 1; i <= 1; i++) {
-      $scope.data[0].splice(0, 0,$scope.TotalData[$scope.positiontab-i]);
-    }
-
-    // Test si les points sont de couleur verte
-    for (var j = $scope.data[0].length-1; j >= 0; j--) {
-      // Si oui
-      if($scope.myChart.datasets[0].points[j].fillColor == '#00ff99') {
-        // si le point et le point le plus a gauche
-        if(j == $scope.data[0].length-1) {
-          // Change la couleur du point en couleur par défaut
-          $scope.myChart.datasets[0].points[j].fillColor='rgba(151,187,205,1)';
-        }
-        else {
-          // Change la couleur du point 1 crant a gauche en couleur verte
-          $scope.myChart.datasets[0].points[j+1].fillColor='#00ff99';
-          // Change la couleur du point en couleur par défaut
-          $scope.myChart.datasets[0].points[j].fillColor='rgba(151,187,205,1)';
-        }
-      }
-    }
-    // mais a jour la position du tableau data
-    $scope.positiontab = $scope.positiontab - 1;
-  };
-
-  // Fonction Swipe gauche
-  $scope.onSwipeLeft = function() {
-    console.log("GragLeft");
-    // Suprime points a gauche
-    $scope.data[0].splice(0, 1);
-    // Ajoute point droite
-    for (var i = 1; i <= 1; i++) {
-      $scope.data[0].push($scope.TotalData[$scope.positiontab+47+i])
-    }
-
-    // Test si les points sont de couleur verte
-    for (var j = 0; j < $scope.data[0].length; j++) {
-      // Si oui
-      if($scope.myChart.datasets[0].points[j].fillColor == '#00ff99') {
-        // si le point et le point le plus a gauche
-        if(j == 0) {
-          // Change la couleur du point en couleur par défaut
-          $scope.myChart.datasets[0].points[j].fillColor='rgba(151,187,205,1)';
-        }
-        else {
-          // Change la couleur du point 1 crant a gauche en couleur verte
-          $scope.myChart.datasets[0].points[j-1].fillColor='#00ff99';
-          // Change la couleur du point en couleur par défaut
-          $scope.myChart.datasets[0].points[j].fillColor='rgba(151,187,205,1)';
-        }
-      }
-    }
-    // mais a jour la position du tableau data
-    $scope.positiontab = $scope.positiontab + 1;
-  };
-
-  $scope.valDragRight = 1;
-  $scope.onDragRight = function() {
-    //alert("DragRight");
-    $scope.valDragRight += 1;
-    console.log($scope.valDragRight);
-    if($scope.valDragRight % 5 == 0)
-    {
-      // Suprime le dernier ellement
-      $scope.data[0].pop();
-      //Ajoute un ellement au debut
-      for (var i = 1; i <= 1; i++) {
-        $scope.data[0].splice(0, 0,$scope.TotalData[$scope.positiontab-i]);
-      }
-
-      // Test si les points sont de couleur verte
-      for (var j = $scope.data[0].length-1; j >= 0; j--) {
-        // Si oui
-        if($scope.myChart.datasets[0].points[j].fillColor == '#00ff99') {
-          // si le point et le point le plus a gauche
-          if(j == $scope.data[0].length-1) {
-            // Change la couleur du point en couleur par défaut
-            $scope.myChart.datasets[0].points[j].fillColor='rgba(151,187,205,1)';
-          }
-          else {
-            // Change la couleur du point 1 crant a gauche en couleur verte
-            $scope.myChart.datasets[0].points[j+1].fillColor='#00ff99';
-            // Change la couleur du point en couleur par défaut
-            $scope.myChart.datasets[0].points[j].fillColor='rgba(151,187,205,1)';
-          }
-        }
-      }
-      // mais a jour la position du tableau data
-      $scope.positiontab = $scope.positiontab - 1;
-    }
-
-  }
-
-  $scope.valDragLeft = 1;
-  $scope.onDragLeft = function() {
-    //alert("DragLeft");
-    $scope.valDragLeft += 1;
-    console.log($scope.valDragLeft);
-    if($scope.valDragLeft % 5 == 0)
-    {
-      // Suprime points a gauche
-      $scope.data[0].splice(0, 1);
-      // Ajoute point droite
-      for (var i = 1; i <= 1; i++) {
-        $scope.data[0].push($scope.TotalData[$scope.positiontab+47+i])
-      }
-
-      // Test si les points sont de couleur verte
-      for (var j = 0; j < $scope.data[0].length; j++) {
-        // Si oui
-        if($scope.myChart.datasets[0].points[j].fillColor == '#00ff99') {
-          // si le point et le point le plus a gauche
-          if(j == 0) {
-            // Change la couleur du point en couleur par défaut
-            $scope.myChart.datasets[0].points[j].fillColor='rgba(151,187,205,1)';
-          }
-          else {
-            // Change la couleur du point 1 crant a gauche en couleur verte
-            $scope.myChart.datasets[0].points[j-1].fillColor='#00ff99';
-            // Change la couleur du point en couleur par défaut
-            $scope.myChart.datasets[0].points[j].fillColor='rgba(151,187,205,1)';
-          }
-        }
-      }
-      // mais a jour la position du tableau data
-      $scope.positiontab = $scope.positiontab + 1;
-
-    }
-
-  }
-});
+		zingchart.complete = function() {
+		$ionicLoading.hide();
+		}
+	});
