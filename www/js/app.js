@@ -56,14 +56,6 @@ app.run(function($ionicPlatform, $rootScope, BDD, ListPatients) {
 // Configuration des differante etat (pages) et l'etat (page) par deffaut
 app.config(function($stateProvider,$urlRouterProvider) {
 
-	// Etat start
-	$stateProvider.state("start", {
-		url: "/start",
-		templateUrl: "templates/start.html",
-		controller: "startCtrl"
-	})
-
-
 	// Etat home
 	$stateProvider.state("home", {
 		url: "/home",
@@ -99,6 +91,13 @@ app.config(function($stateProvider,$urlRouterProvider) {
 		templateUrl: "templates/infoAlerte.html",
 		controller: "infoAlerteCtrl"
 	})
+
+  // Etat graphAlert
+  $stateProvider.state("graphAlert", {
+    url: "/graphAlert/:mData",
+    templateUrl: "templates/graphAlert.html",
+    controller: "graphAlertCtrl"
+  })
 
 
 	// Etat par defaut (la page de demarage)

@@ -36,10 +36,6 @@ app.service('Background', function($rootScope, $timeout){
           });
         }, 30);
       }
-
-
-      //$scope.$apply();
-
     };
   };
 

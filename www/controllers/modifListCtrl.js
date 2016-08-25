@@ -1,5 +1,5 @@
 // controleur du Home
-app.controller("modifListCtrl", function( $scope, $rootScope, $state, $stateParams, Socket, ListPatients, Alertes, $ionicHistory, Notification, $ionicPopover, $cordovaBarcodeScanner, BDD)
+app.controller("modifListCtrl", function( $scope, $rootScope, $state, $stateParams, $ionicHistory, $ionicPopover, $cordovaBarcodeScanner, ListPatients, BDD, Background)
 {
 	$scope.test = false;
 
@@ -80,8 +80,8 @@ app.controller("modifListCtrl", function( $scope, $rootScope, $state, $statePara
 
 	$scope.modifPatient = function() {
 		// deconnaicte un ellement de la liste des sockets
-		Socket.connectionpatients[$scope.mId].MySocketDictionary["freq"].socket.close();
-		Socket.connectionpatients[$scope.mId].MySocketDictionary["alarm"].socket.close();
+		ListPatients.patients[$scope.mId].socket.MySocketDictionary["freq"].socket.close();
+		ListPatients.patients[$scope.mId].socket.MySocketDictionary["alarm"].socket.close();
 		// cache le patient
 		ListPatients.patients[$scope.mId].supprimer = true;
 		BDD.Delete("DELETE FROM BbSensor where id=?", $scope.patient.id);
@@ -90,13 +90,16 @@ app.controller("modifListCtrl", function( $scope, $rootScope, $state, $statePara
 		ListPatients.addPatient($scope.patient);
 		// Ajoute le patient dans la base de donnée
 		BDD.InsertPatientInBDD("INSERT INTO BbSensor (Nom, Chambre, IP, Port) VALUES (?,?,?,?)", $scope.patient.nom, $scope.patient.chambre, $scope.patient.ip, $scope.patient.port);
+
+		Background.remouveName(ListPatients.patients[$scope.mId].nom);
+		$rootScope.nbalert -= 1;
 	};
 
 	$scope.modifSeuil = function() {
 		//ListPatients.patients[$scope.mId].seuils = $scope.seuils;
 		ListPatients.patients[$scope.mId].seuils.FCmax = parseInt($scope.seuils.FCmax);
 		ListPatients.patients[$scope.mId].seuils.FCmin = parseInt($scope.seuils.FCmin);
-		Socket.connectionpatients[$scope.mId].send('alarm', $scope.seuils.FCmin + ';' + $scope.seuils.FCmax);
+		ListPatients.patients[$scope.mId].socket.send('alarm', $scope.seuils.FCmin + ';' + $scope.seuils.FCmax);
 		$ionicHistory.goBack();
 	};
 });

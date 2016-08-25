@@ -2,8 +2,9 @@
 <ion-view view-title = "Alertes">
 	<!-- Indique le contenu de la vue -->
 	<ion-content >
+		<button class="button button-full  button-assertive icon-left ion-trash-a" ng-if='data.showDelete' ng-click="deleteAll()">Tout supprimer</button>
 		<ion-list show-delete="data.showDelete">
-			<ion-item  class="item-remove-animate info-alert" ng-repeat="al in lesAlertes" >
+			<ion-item  class="item-remove-animate info-alert" ng-repeat="al in lesAlertes" ng-click="signalAlerte($index)">
 				<h2>{{al.date}}</h2>
 				<p>
 					<span>
@@ -15,12 +16,12 @@
         </ion-delete-button>
 			</ion-item>
 		</ion-list>
-		<button class="button button-full  button-assertive icon-left ion-trash-a" ng-click="deleteAll()">Tout supprimer</button>
+
 
 	</ion-content>
 
 	<!-- Ajoute un nouveau bouton a droite pour suprimer les alertes -->
 	<ion-nav-buttons side="right" >
-			<button class="button button-icon icon ion-ios-minus-outline" ng-click="data.showDelete = !data.showDelete"></button>
+			<button class="button button-icon icon ion-ios-minus-outline" ng-class="{'ion-reply': data.showDelete == true}" ng-click="data.showDelete = !data.showDelete"></button>
 	</ion-nav-buttons>
 </ion-view>

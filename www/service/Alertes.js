@@ -1,45 +1,82 @@
-app.service('Alertes', function($rootScope, $interval, $timeout, Notification, ListPatients, Background){
+app.service('Alertes', function($rootScope, $interval, $timeout, ListPatients, Background){
 
   this.modelAlert = {type:'', valeur:0, date:''};
 
+  this.configGlobalAlert = {plagetemp:1, delaisAlertRes:30, nbAlertMem:6};
+  this.dataSignalAlerte = {data:[], nbData:0, dataMin:0, dataMax:0}
+
   this.indiqueAlerte = function(id, seuil){
+    var temp = [];
     var date = new Date();
+    var dateInt = date.getTime();
     date = date.toDateString() + " " + date.toLocaleTimeString();
-    ListPatients.patients[id].alertes.splice(0, 0, {descriptif: "Fc "+ seuil, date: date});
 
-    if(ListPatients.patients[id].etat == 1){
-      // Change l'icone
+
+    // Ajoute le nouvelle alerte
+    ListPatients.patients[id].alertes.splice(0, 0, {descriptif: "Fc "+ seuil, date: date, dateInt: dateInt});
+
+    // Si il y plus de X alerte memorisé
+    if(ListPatients.patients[id].alertes.length > this.configGlobalAlert.nbAlertMem)
+    {
+      // Supprime alerte en trop
+      var nbAlertM = this.configGlobalAlert.nbAlertMem;
       $timeout(function() {
-        ListPatients.patients[id].etat = 2;
+        ListPatients.patients[id].alertes.splice(nbAlertM, ListPatients.patients[id].alertes.length - nbAlertM);
       }, 0);
+    }
 
-      $timeout(function() {
-        if(ListPatients.patients[id].etat == 2)
-        {
-          ListPatients.patients[id].etat = 3;
+    // Fonction de clignotement
+    var clignoteFunc = function(){
+      if(ListPatients.patients[id].clignote == true)
+      {
+        if(ListPatients.patients[id].alarme == 1){
+          $timeout(function() {
+           ListPatients.patients[id].alarme = 0;
+          },0);
         }
-      }, $rootScope.Paramgeneral.delaisAlertRes * 1000);
-      /*
-      var fnc = function(){
+        else{
+          $timeout(function() {
+            ListPatients.patients[id].alarme = 1;
+          },0);
+        }
+        //ListPatients.patients[id].timeoutAlarm.promiseTimeoutClignot = $timeout(clignoteFunc, 500);
+      }
+    }
+
+    var alertNonResFunc = function() {
+      var repPromise = $interval.cancel(ListPatients.patients[id].timeoutAlarm.promiseTimeoutClignot);
+      if(repPromise){
         $timeout(function() {
-          if(ListPatients.patients[id].etat == 2)
-          {
-            ListPatients.patients[id].clignote = !ListPatients.patients[id].clignote;
-          }
-        }, 0);
+          ListPatients.patients[id].clignote = false;
+          ListPatients.patients[id].alarme = 2;
+        },0);
+      }
 
-      };
+    }
 
-      //$rootScope.clign = setInterval(fnc, 500);
-      ListPatients.patients[id].inervalFunc = setInterval(fnc,500);
-      */
+
+    if((ListPatients.patients[id].alarme == 0) && (ListPatients.patients[id].clignote == false)){
+      ListPatients.patients[id].clignote = true;
+      // Fais clignoter
+      ListPatients.patients[id].timeoutAlarm.promiseTimeoutClignot = $interval(clignoteFunc, 500);
+
+      // Indique que alerte pas recente
+      ListPatients.patients[id].timeoutAlarm.promiseTimeoutAlarmNonRes = $timeout(alertNonResFunc, this.configGlobalAlert.delaisAlertRes * 1000);
 
       // Fait vibrer 1sec
-      Notification.vibrate(1000);
+      navigator.notification.vibrate(1000); // Fait vibrer X milisec
       // fais sonner 1 fois
-      Notification.beep(1);
+      navigator.notification.beep(1); // fais sonner n fois
+
       // Affiche un message aletre
-      //Notification.alert('le patient ' + (i) + ' a un problème de FC', null, 'Fc problème', 'OK');
+      /*
+      navigator.notification.alert(
+              message,  		// message
+              callback,		// callback
+              title,          // title
+              buttonName      // buttonName
+      );
+      */
 
 
       Background.addNameAlert(ListPatients.patients[id].nom);

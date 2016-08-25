@@ -1,19 +1,14 @@
 // controleur du Home
-app.controller("infoPatientCtrl", function( $scope, $rootScope, $state, $stateParams, Socket, ListPatients, $ionicHistory, Background)
+app.controller("infoPatientCtrl", function( $scope, $rootScope, $state, $stateParams, Socket, ListPatients, $ionicHistory, $timeout)
 {
   $scope.index = $stateParams.mIndex;
 
   // Global function showing the signals ***************************************************************
   function monitorFunction(document) {
-    //"use strict";
-    //alert(window.innerHeight);
     var navbar = document.getElementsByClassName("mynavbar");
 
-  //  alert(navbar.height);
 
     const monitor = document.getElementById("monitor");
-    console.log(monitor.width);
-  //  monitor.height = window.innerHeight /2;
     const ctx = monitor.getContext("2d");
     ctx.fillStyle = "#dbbd7a";
     ctx.fill();
@@ -128,7 +123,7 @@ app.controller("infoPatientCtrl", function( $scope, $rootScope, $state, $statePa
             drawInfo(signal, this.color, "bold " + SIZE_INFO + "px Arial", positionCenterY(monitorPosition) + SIZE_INFO / 2);
           }
         };
-        this.basicSignal("0;0");
+        this.basicSignal("0;0;0.0");
 
 
         // Effaçage du signal précédent
@@ -141,16 +136,15 @@ app.controller("infoPatientCtrl", function( $scope, $rootScope, $state, $statePa
           );
         };
 
-/*
-        // Configuration des sockets pour recevoir les signaux
-        var js = new JoelSocket();
-        js.register(signals[0], this.drawFlowSignal.bind(this));
-        js.register(signals[1], this.basicSignal.bind(this));
-*/
 
         var js = Socket.construct("ws://"+ ListPatients.patients[$scope.index].ip + ":" + ListPatients.patients[$scope.index].port);
         js.register(signals[0], this.drawFlowSignal.bind(this));
         js.register(signals[1], this.basicSignal.bind(this));
+
+        // close tous les socket a la fermeture de la vue
+        $scope.$on("$ionicView.beforeLeave", function(event, data){
+           js.closeAll();
+        });
 
 
       }
@@ -160,15 +154,22 @@ app.controller("infoPatientCtrl", function( $scope, $rootScope, $state, $statePa
           return value / 200;
         }
       );
-/*
-      new Signal(1, 1, "BPM2", ["lead", "freq"], "blue", function (value) {
-          return value / 100;
+
+
+      new Signal(1,1,"BPM2",["lead", "freq"],"blue",function (value) {
+          return value / 200;
         }
       );
-    */
+
+      new Signal(2,2,"Resp",["lead", "freq"],"yellow",function (value) {
+          value = value / 25;
+          return value;
+        }
+      );
+
+
     }
 
-    //drawInfo("BB Sensor v0.1", "gray", "bold 10px Arial", 12);
     drawWave();
   }
 

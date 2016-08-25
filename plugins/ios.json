@@ -7,6 +7,9 @@
         "files": {}
     },
     "installed_plugins": {
+        "cordova-plugin-background-mode": {
+            "PACKAGE_NAME": "com.ionicframework.bbsensor697475"
+        },
         "cordova-plugin-console": {
             "PACKAGE_NAME": "com.ionicframework.bbsensor697475"
         },
@@ -28,13 +31,13 @@
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.ionicframework.bbsensor697475"
         },
+        "cordova-sqlite-storage": {
+            "PACKAGE_NAME": "com.ionicframework.bbsensor697475"
+        },
         "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.ionicframework.bbsensor697475"
         },
-        "cordova-plugin-background-mode": {
-            "PACKAGE_NAME": "com.ionicframework.bbsensor697475"
-        },
-        "cordova-sqlite-storage": {
+        "phonegap-plugin-barcodescanner": {
             "PACKAGE_NAME": "com.ionicframework.bbsensor697475"
         }
     },
