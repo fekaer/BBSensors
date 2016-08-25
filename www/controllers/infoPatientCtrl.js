@@ -113,7 +113,6 @@ app.controller("infoPatientCtrl", function( $scope, $rootScope, $state, $statePa
 
         // Information ponctuelle
         this.basicSignal = function (signal) {
-          console.log("basicSignal");
           if((signal[0] != 'c') && (signal[0] != 'd')){
             const topMargin = 20;
             ctx.clearRect(MARGIN_MONITOR_RIGHT + 10, positionTopY(monitorPosition) + topMargin, monitor.width - MARGIN_MONITOR_RIGHT, monitor.height / NB_BLOCK - MARGIN_BLOCK / 2 - topMargin);
