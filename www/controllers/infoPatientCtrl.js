@@ -91,7 +91,6 @@ app.controller("infoPatientCtrl", function( $scope, $rootScope, $state, $statePa
 
         // Flux du signal
         this.drawFlowSignal = function (signal) {
-          console.log("drawFlowSignal");
           if((signal[0] != 'c') && (signal[0] != 'd')){
             ctx.lineWidth = "2";
             this.x = (this.x - MARGIN_MONITOR_LEFT + PIXEL_STEP)

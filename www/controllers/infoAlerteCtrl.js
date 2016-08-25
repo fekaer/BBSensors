@@ -7,7 +7,6 @@ app.controller("infoAlerteCtrl", function( $scope, $rootScope, $state, $ionicLoa
 	};
 
 	$scope.index = $stateParams.mIndex;
-	console.log($scope.index);
 	$scope.lesAlertes = ListPatients.patients[$scope.index].alertes;
 
 
@@ -88,8 +87,7 @@ app.controller("infoAlerteCtrl", function( $scope, $rootScope, $state, $ionicLoa
 		};
 
 		started = (new Date()).getTime();
-		console.log(started);
-		console.log("salut");
+
 		ListPatients.patients[$scope.index].socket.connectSendAndClose("history", getdataAletre, mtime + ";" + (Alertes.configGlobalAlert.plagetemp * 60 * 250));
 
 	//	$timeout(function(){

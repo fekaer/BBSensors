@@ -157,12 +157,10 @@ app.controller("homeCtrl", function( $scope, $rootScope, $ionicHistory, $ionicPo
 				ListPatients.patients[id].seuils.FCmax = parseInt(val[1]);
 			}else if(data.search("MIN_FREQ;") != -1)
 			{
-				console.log('MIN_FREQ');
 				seuil = "< " + ListPatients.patients[id].seuils.FCmin;
 				Alertes.indiqueAlerte(id, seuil);
 			}else if(data.search("MAX_FREQ;") != -1)
 			{
-				console.log('MAX_FREQ');
 				var seuil = "> " + ListPatients.patients[id].seuils.FCmax;
 				Alertes.indiqueAlerte(id, seuil);
 			}else{
@@ -292,7 +290,6 @@ app.controller("homeCtrl", function( $scope, $rootScope, $ionicHistory, $ionicPo
 
 // Gère le bouton "retoure en arrière du téléphone"
 	$ionicPlatform.registerBackButtonAction(function(){
-		console.log($ionicHistory.currentTitle());
 		if($ionicHistory.currentTitle() == 'Patients')
 		{
 			var confirmPopup = $ionicPopup.confirm({

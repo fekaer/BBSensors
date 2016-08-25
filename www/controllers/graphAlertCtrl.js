@@ -1,7 +1,5 @@
 app.controller("graphAlertCtrl", function($scope, $stateParams, $ionicLoading, $rootScope, Alertes, ListPatients) {
 	$scope.mtimeInt = $stateParams.mData;
-	console.log("je veux voir ca ici mint");
-	console.log($scope.mtimeInt);
 
 	var nb_data_graph = Alertes.dataSignalAlerte.data.length;
 	var min = Alertes.dataSignalAlerte.dataMin;
