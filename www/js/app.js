@@ -94,7 +94,7 @@ app.config(function($stateProvider,$urlRouterProvider) {
 
   // Etat graphAlert
   $stateProvider.state("graphAlert", {
-    url: "/graphAlert",
+    url: "/graphAlert/:mData",
     templateUrl: "templates/graphAlert.html",
     controller: "graphAlertCtrl"
   })

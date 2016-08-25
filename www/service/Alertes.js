@@ -8,10 +8,15 @@ app.service('Alertes', function($rootScope, $interval, $timeout, ListPatients, B
   this.indiqueAlerte = function(id, seuil){
     var temp = [];
     var date = new Date();
+    var dateInt = date.getTime();
     date = date.toDateString() + " " + date.toLocaleTimeString();
 
+
     // Ajoute le nouvelle alerte
-    ListPatients.patients[id].alertes.splice(0, 0, {descriptif: "Fc "+ seuil, date: date});
+    console.log(ListPatients.patients[id].alertes);
+    ListPatients.patients[id].alertes.splice(0, 0, {descriptif: "Fc "+ seuil, date: date, dateInt: dateInt});
+    console.log("je veux voire ca");
+    console.log(ListPatients.patients[id].alertes);
 
     // Si il y plus de X alerte memorisé
     if(ListPatients.patients[id].alertes.length > this.configGlobalAlert.nbAlertMem)

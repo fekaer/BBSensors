@@ -149,7 +149,8 @@ app.controller("homeCtrl", function( $scope, $rootScope, $ionicHistory, $ionicPo
 		// si ce n'est pas le message de conection ni le message de déconnection
 		if((data != 'connect') && (data != 'disconnect'))
 		{
-
+			console.log("NEW_FREQ");
+			console.log(data);
 			if(data.search("NEW_FREQ;") != -1)
 			{
 				console.log('New Freq recu');
@@ -157,19 +158,18 @@ app.controller("homeCtrl", function( $scope, $rootScope, $ionicHistory, $ionicPo
 				val = val.split(";");
 				ListPatients.patients[id].seuils.FCmin = parseInt(val[0]);
 				ListPatients.patients[id].seuils.FCmax = parseInt(val[1]);
-			}
-
-			if(data.search("MIN_FREQ;") != -1)
+			}else if(data.search("MIN_FREQ;") != -1)
 			{
 				console.log('MIN_FREQ');
 				seuil = "< " + ListPatients.patients[id].seuils.FCmin;
 				Alertes.indiqueAlerte(id, seuil);
-			}
-			if(data.search("MAX_FREQ;") != -1)
+			}else if(data.search("MAX_FREQ;") != -1)
 			{
 				console.log('MAX_FREQ');
 				var seuil = "> " + ListPatients.patients[id].seuils.FCmax;
 				Alertes.indiqueAlerte(id, seuil);
+			}else{
+
 			}
 		}
 	}

@@ -59,7 +59,7 @@ app.service('Socket', function($rootScope, $q, ListPatients){
 			// si la connection n'est pas encore etablie
 			if(!(signalName in updateAndSocketDictionary)){
 				var socket = new WebSocket(adresse, signalName);
-				socket.binaryType = 'arraybuffer'; 
+				socket.binaryType = 'arraybuffer';
 				updateAndSocketDictionary[signalName] = {socket: socket, lstFunc: [], id: id};
 			}
 
@@ -82,7 +82,8 @@ app.service('Socket', function($rootScope, $q, ListPatients){
 				if(signalName === "lead" || signalName == "freq"){
 						var num1 = packet.getInt16(0, true);
 						var num2 = packet.getInt16(2, true);
-						signal = num1 + ";" + num2;
+						var num3 = packet.getInt16(4, true);
+						signal = num1 + ";" + num2 + ";" + num3;
 				}else if(signalName === "alarm"){
 						var type = packet.getInt16(0, true);
 						var num1 = packet.getInt16(2, true);
@@ -99,7 +100,7 @@ app.service('Socket', function($rootScope, $q, ListPatients){
 				_.forEach(
 					updateAndSocketDictionary[signalName].lstFunc,
 					function(updateFunc){
-							updateFunc(signal, updateAndSocketDictionary[signalName].id); 
+							updateFunc(signal, updateAndSocketDictionary[signalName].id);
 					}
 				);
 

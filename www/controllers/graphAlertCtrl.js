@@ -1,11 +1,20 @@
-app.controller("graphAlertCtrl", function($scope, $stateParams, $ionicLoading, $rootScope, Alertes) {
+app.controller("graphAlertCtrl", function($scope, $stateParams, $ionicLoading, $rootScope, Alertes, ListPatients) {
+	$scope.mtimeInt = $stateParams.mData;
+	console.log("je veux voir ca ici mint");
+	console.log($scope.mtimeInt);
+
+	var nb_data_graph = Alertes.dataSignalAlerte.data.length;
+	console.log(nb_data_graph);
 	var min = Alertes.dataSignalAlerte.dataMin;
 	var max = Alertes.dataSignalAlerte.dataMax;
 	console.log(min);
 	console.log(max);
-	//var tab_date = ["2016-06-03 14:43:12","2016-06-03 14:43:13","2016-06-03 14:43:14","2016-06-03 14:43:15",
-	"2016-06-03 14:43:16","2016-06-03 14:43:17","2016-06-03 14:43:18","2016-06-03 14:43:19","2016-06-03 14:43:20",
-	"2016-06-03 14:43:21","2016-06-03 14:43:22"];
+
+	var timeMin = (nb_data_graph * 1000 / 250) / 2;
+	console.log("ici");
+	console.log(timeMin);
+	timeMin = $scope.mtimeInt - timeMin;
+
 
 	    $scope.clickBottom = function(){
 				var val = ((max - min) * 10) / 100;
@@ -32,6 +41,16 @@ app.controller("graphAlertCtrl", function($scope, $stateParams, $ionicLoading, $
 					//ymax: max
 					zoomx: false,
 					zoomy: true
+				})
+			};
+
+			$scope.clickBottom3 = function(){
+				zingchart.exec('myChart', 'zoomto', {
+					graphid: 0,
+					xmin: nb_data_graph/2 -1000,
+					xmax: nb_data_graph/2 +1000
+					//zoomx: true,
+					//zoomy: true
 				})
 			};
 
@@ -111,8 +130,28 @@ app.controller("graphAlertCtrl", function($scope, $stateParams, $ionicLoading, $
 
 
 	        "scale-x": {
-	          "values": "0:" + Alertes.dataSignalAlerte.nbData + ":1", // data a afficher dans le second graph
-	          "max-items": 11, // nombre de point sur l'axe des X
+	          //"values": "0:" + Alertes.dataSignalAlerte.nbData + ":1", // data a afficher dans le second graph
+	          //"max-items": 11, // nombre de point sur l'axe des X
+						"minValue":timeMin, //temps en millisec du premier point
+					  "step":4, //milsec entre chaque point
+					  "transform":{ //makes unix timestamps humon readable
+			            "type":"date",
+			            "all":"%D, %d %M %Y<br>%H:%i:%s"
+						},
+						"markers": [ // le marqueur
+						  {
+								"type":"line",
+								"range":[$scope.mtimeInt], //temps en milisec ou il soit s'afficher
+								"value-range":true, // afficher
+								"line-color":"red", // couleur
+								"line-width":2, // epesseur
+								"line-style":"solid", // type de ligne
+								"alpha":1 // je sais pas
+								//"text": "Alerte"
+						  }
+						],
+
+
 	          "zooming": true, // Indique q'on peux zoomer
 	          "zoom-to": [Alertes.dataSignalAlerte.nbData/2 -1000, Alertes.dataSignalAlerte.nbData/2 +1000], // valeur a afficher dans le tableau zoomé entres les 2 val
 	          "item": {
@@ -145,7 +184,7 @@ app.controller("graphAlertCtrl", function($scope, $stateParams, $ionicLoading, $
 	            "line-style": "dotted"
 	          },
 	          "item": {
-	            "font-size": 10 // taille des val axe Y
+	            "font-size": 0 // taille des val axe Y
 	          }
 	        },
 	        "crosshair-y": {

@@ -7,6 +7,7 @@ app.controller("infoAlerteCtrl", function( $scope, $rootScope, $state, $ionicLoa
 	};
 
 	$scope.index = $stateParams.mIndex;
+	console.log($scope.index);
 	$scope.lesAlertes = ListPatients.patients[$scope.index].alertes;
 
 
@@ -53,49 +54,42 @@ app.controller("infoAlerteCtrl", function( $scope, $rootScope, $state, $ionicLoa
 	}
 
 	// Fonction pour afficher les alertes d'un passient du tableau des alertes
-	$scope.signalAlerte = function(index)
+	$scope.signalAlerte = function(index_alerte)
 	{
-		var d = new Date();
-		/*
+		var timeInt = ListPatients.patients[$scope.index].alertes[index_alerte].dateInt;
+		//var d = new Date();
+
 		$ionicLoading.show({
 			template: 'Loading...'
 		});
-		*/
 
-		var mtime = $scope.getTimeAlerte(index);
+
+		var mtime = $scope.getTimeAlerte(index_alerte);
 		var started = null;
 
 		var getdataAletre = function(signal){
 			var diff = (new Date()).getTime() - started;
-			alert("arrive" + diff);
-			/*
-			Alertes.dataSignalAlerte.nbData = signal.length/2;
-			console.log(Alertes.dataSignalAlerte.nbData);
-
+			Alertes.dataSignalAlerte.nbData = signal.length/3;
 
 			var arrayDataTemp = [];
-			console.log(d.getTime());
 			var i;
-			for (i = 0; i < signal.length; i+2) {
-				if(i < signal.length)
-				{
-					arrayDataTemp[i/2] = signal[i];
-				}
-				else{
-					console.log("coucou");
-				}
-
+			for (i = 0; i < Alertes.dataSignalAlerte.nbData; i++) {
+				arrayDataTemp.push(signal[i*3])
 			}
-
 			Alertes.dataSignalAlerte.data = arrayDataTemp;
-			//Alertes.dataSignalAlerte.dataMin = Math.min.apply(null, signal);
-			//Alertes.dataSignalAlerte.dataMax = Math.max.apply(null, signal);
-			$state.go("graphAlert");
-			*/
+
+			Alertes.dataSignalAlerte.dataMin = Math.min.apply(null, Alertes.dataSignalAlerte.data);
+			Alertes.dataSignalAlerte.dataMax = Math.max.apply(null, Alertes.dataSignalAlerte.data);
+
+
+			$state.go("graphAlert",{mData:timeInt});
+
 
 		};
 
 		started = (new Date()).getTime();
+		console.log(started);
+		console.log("salut");
 		ListPatients.patients[$scope.index].socket.connectSendAndClose("history", getdataAletre, mtime + ";" + (Alertes.configGlobalAlert.plagetemp * 60 * 250));
 
 	//	$timeout(function(){

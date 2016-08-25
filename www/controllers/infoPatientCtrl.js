@@ -123,7 +123,7 @@ app.controller("infoPatientCtrl", function( $scope, $rootScope, $state, $statePa
             drawInfo(signal, this.color, "bold " + SIZE_INFO + "px Arial", positionCenterY(monitorPosition) + SIZE_INFO / 2);
           }
         };
-        this.basicSignal("0;0");
+        this.basicSignal("0;0;0");
 
 
         // Effaçage du signal précédent
@@ -149,6 +149,19 @@ app.controller("infoPatientCtrl", function( $scope, $rootScope, $state, $statePa
           return value / 200;
         }
       );
+
+      new Signal(1,1,"BPM2",["lead", "freq"],"blue",function (value) {
+          return value / 200;
+        }
+      );
+
+      new Signal(2,2,"Resp",["lead", "freq"],"yellow",function (value) {
+          value = value / 25;
+          return value;
+        }
+      );
+
+
 /*
       new Signal(1, 1, "BPM2", ["lead", "freq"], "blue", function (value) {
           return value / 100;
