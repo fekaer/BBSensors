@@ -149,11 +149,8 @@ app.controller("homeCtrl", function( $scope, $rootScope, $ionicHistory, $ionicPo
 		// si ce n'est pas le message de conection ni le message de déconnection
 		if((data != 'connect') && (data != 'disconnect'))
 		{
-			console.log("NEW_FREQ");
-			console.log(data);
 			if(data.search("NEW_FREQ;") != -1)
 			{
-				console.log('New Freq recu');
 				var val = data.replace("NEW_FREQ;", "");
 				val = val.split(";");
 				ListPatients.patients[id].seuils.FCmin = parseInt(val[0]);

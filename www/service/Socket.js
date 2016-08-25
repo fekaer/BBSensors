@@ -24,11 +24,20 @@ app.service('Socket', function($rootScope, $q, ListPatients){
 
 
 	// The JoelSocket simplify the websocket management **************************************************
-    function JoelSocket(adresse){
+  function JoelSocket(adresse){
     //"use strict";
 		var updateAndSocketDictionary = {};
 		this.MySocketDictionary = updateAndSocketDictionary;
 
+		this.closeAll = function(){
+			console.log("pute pute");
+			Object.keys(updateAndSocketDictionary).forEach(function(signalName, index) {
+				console.log(updateAndSocketDictionary[signalName]);
+				if(updateAndSocketDictionary[signalName] && updateAndSocketDictionary[signalName].socket && updateAndSocketDictionary[signalName].socket.close){
+					updateAndSocketDictionary[signalName].socket.close();
+				}
+			}, updateAndSocketDictionary);
+		}
 
 		this.connectSendAndClose = function(signalName, func, message){
 			var socket = new WebSocket(adresse, signalName);

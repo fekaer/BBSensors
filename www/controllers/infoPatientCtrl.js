@@ -1,5 +1,5 @@
 // controleur du Home
-app.controller("infoPatientCtrl", function( $scope, $rootScope, $state, $stateParams, Socket, ListPatients, $ionicHistory)
+app.controller("infoPatientCtrl", function( $scope, $rootScope, $state, $stateParams, Socket, ListPatients, $ionicHistory, $timeout)
 {
   $scope.index = $stateParams.mIndex;
 
@@ -91,6 +91,7 @@ app.controller("infoPatientCtrl", function( $scope, $rootScope, $state, $statePa
 
         // Flux du signal
         this.drawFlowSignal = function (signal) {
+          console.log("drawFlowSignal");
           if((signal[0] != 'c') && (signal[0] != 'd')){
             ctx.lineWidth = "2";
             this.x = (this.x - MARGIN_MONITOR_LEFT + PIXEL_STEP)
@@ -113,6 +114,7 @@ app.controller("infoPatientCtrl", function( $scope, $rootScope, $state, $statePa
 
         // Information ponctuelle
         this.basicSignal = function (signal) {
+          console.log("basicSignal");
           if((signal[0] != 'c') && (signal[0] != 'd')){
             const topMargin = 20;
             ctx.clearRect(MARGIN_MONITOR_RIGHT + 10, positionTopY(monitorPosition) + topMargin, monitor.width - MARGIN_MONITOR_RIGHT, monitor.height / NB_BLOCK - MARGIN_BLOCK / 2 - topMargin);
@@ -123,7 +125,7 @@ app.controller("infoPatientCtrl", function( $scope, $rootScope, $state, $statePa
             drawInfo(signal, this.color, "bold " + SIZE_INFO + "px Arial", positionCenterY(monitorPosition) + SIZE_INFO / 2);
           }
         };
-        this.basicSignal("0;0;0");
+        this.basicSignal("0;0;0.0");
 
 
         // Effaçage du signal précédent
@@ -141,6 +143,11 @@ app.controller("infoPatientCtrl", function( $scope, $rootScope, $state, $statePa
         js.register(signals[0], this.drawFlowSignal.bind(this));
         js.register(signals[1], this.basicSignal.bind(this));
 
+        // close tous les socket a la fermeture de la vue
+        $scope.$on("$ionicView.beforeLeave", function(event, data){
+           js.closeAll();
+        });
+
 
       }
 
@@ -149,6 +156,7 @@ app.controller("infoPatientCtrl", function( $scope, $rootScope, $state, $statePa
           return value / 200;
         }
       );
+
 
       new Signal(1,1,"BPM2",["lead", "freq"],"blue",function (value) {
           return value / 200;
@@ -162,12 +170,6 @@ app.controller("infoPatientCtrl", function( $scope, $rootScope, $state, $statePa
       );
 
 
-/*
-      new Signal(1, 1, "BPM2", ["lead", "freq"], "blue", function (value) {
-          return value / 100;
-        }
-      );
-    */
     }
 
     drawWave();

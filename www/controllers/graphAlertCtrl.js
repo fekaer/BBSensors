@@ -4,15 +4,12 @@ app.controller("graphAlertCtrl", function($scope, $stateParams, $ionicLoading, $
 	console.log($scope.mtimeInt);
 
 	var nb_data_graph = Alertes.dataSignalAlerte.data.length;
-	console.log(nb_data_graph);
 	var min = Alertes.dataSignalAlerte.dataMin;
 	var max = Alertes.dataSignalAlerte.dataMax;
-	console.log(min);
-	console.log(max);
+
 
 	var timeMin = (nb_data_graph * 1000 / 250) / 2;
-	console.log("ici");
-	console.log(timeMin);
+
 	timeMin = $scope.mtimeInt - timeMin;
 
 
