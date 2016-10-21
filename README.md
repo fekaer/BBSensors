@@ -40,4 +40,4 @@ Il est demandé que l’application remplisse les points suivants :
 
 ### Démo
 
-Il est impoSsible de tester le programme pour une question de confidancialité, car le serveur renvois des véritables données de patient. Parcontre, vous trouvez une vidéo illustrant les différentes fonctionnalités de l'API.
+Il est impoSsible de tester le programme pour une question de confidancialité, car le serveur renvois des véritables données de patient. Parcontre, vous trouvez une vidéo illustrant les différentes fonctionnalités de l'API dans le dossier Video_Demo.
