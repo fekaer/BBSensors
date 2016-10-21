@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-# README #
-
-=======
 # BBSensors
->>>>>>> b6ed2b2cf9c26a8e2d037bba3f8caae41a337508
 
 ## Projet BBSensors ##
 
@@ -17,11 +12,6 @@ Actuellement, en cas d’alerte d’un patient, le moniteur ECG sonne pour prév
 L’étape clé du projet est de transmettre les valeurs mesurées par les différents capteurs ainsi que les anomalies vers un périphérique mobile utilisé par les médecins et le personnel soignant. Il s'agit donc de développer une application mobile hybride (iOS & Android) qui communique avec un système embarqué.
 Le périphérique reçoit les données traitées et les alertes. Ces alertes permettent d’informer le personnel soignant qu’un patient est en danger (fréquence cardiaque trop basse, arrêt cardiaque…) pour que le temps de réaction soit le plus bref possible.
 La création de l’application hybride est développée via le Framework1 Ionic. Elle est multi plateforme et déployable sur le store.
-<<<<<<< HEAD
-![Schema.PNG](https://bitbucket.org/repo/MBKR9B/images/2353690460-Schema.PNG)
-=======
->>>>>>> b6ed2b2cf9c26a8e2d037bba3f8caae41a337508
-
 
 ### Objectifs ###
 
@@ -46,8 +36,4 @@ Il est demandé que l’application remplisse les points suivants :
 
    - Mémoire
    - Projet (code source)
-<<<<<<< HEAD
    - Vidéo (démo du projet)
-=======
-   - Vidéo (démo du projet)
->>>>>>> b6ed2b2cf9c26a8e2d037bba3f8caae41a337508
