@@ -37,3 +37,7 @@ Il est demandé que l’application remplisse les points suivants :
    - Mémoire
    - Projet (code source)
    - Vidéo (démo du projet)
+
+### Démo
+
+Il est impoSsible de tester le programme pour une question de confidancialité, car le serveur renvois des véritables données de patient. Parcontre, vous trouvez une vidéo illustrant les différentes fonctionnalités de l'API.
